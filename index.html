@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Roadmap BC3 生産管理</title>
+<meta name="author" content="Joseph">
+<meta name="description" content="Roadmap belajar 18 minggu oleh Joseph: tracker materi dengan furigana, kartu hafalan kosakata & kanji, soal 適切/不適切, rumus, dan tips lulus ビジネス・キャリア検定 3級 生産管理オペレーション.">
+<meta property="og:title" content="Roadmap Lulus 生産管理 3級 — oleh Joseph">
+<meta property="og:description" content="Tracker 18 minggu, furigana di setiap kanji, kartu hafalan & tips lulus BC3 生産管理.">
+<meta name="theme-color" content="#15181c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Share+Tech+Mono&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{color-scheme:light}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+/* Layout: one 880px column on a blueprint grid. Hero = machine HMI panel (hazard stripe, andon tower, LCD countdown, operator nameplate).
+   Week cards = work orders, flashcards = kanban cards. Dark-first; light = concrete & white panels. */
+:root{
+  --bg:#0f1114; --surface:#171b20; --surface-2:#1d2228; --ink:#e8ebee; --muted:#8e97a1; --line:#2a3038;
+  --hi:#ffc400; --hi-ink:#121212; --hi-text:#ffc400; --hi-soft:rgba(255,196,0,.12);
+  --ok:#36d07b; --ok-soft:rgba(54,208,123,.14); --warn:#ffab2e; --warn-soft:rgba(255,171,46,.14); --bad:#ff5a47; --bad-soft:rgba(255,90,71,.14);
+  --grid:rgba(110,160,255,.055);
+  --panel:#15181c; --panel-2:#1c2026; --panel-ink:#eef1f4; --panel-muted:#9aa3ad; --panel-line:#2d333b;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 24px -14px rgba(0,0,0,.8);
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --f-disp:"Barlow Condensed","Zen Kaku Gothic New","Arial Narrow",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --f-lcd:"Share Tech Mono","JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#e8eaec; --surface:#ffffff; --surface-2:#f3f4f5; --ink:#15181c; --muted:#5b646e; --line:#d2d7dc;
+  --hi-text:#8a5c00; --hi-soft:#fff2c2;
+  --ok:#1b874c; --ok-soft:#dcf2e4; --warn:#a35800; --warn-soft:#fdebd0; --bad:#c22f21; --bad-soft:#fbe0dc;
+  --grid:rgba(30,60,120,.06);
+  --shadow:0 1px 2px rgba(20,24,28,.06),0 8px 20px -12px rgba(20,24,28,.25); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#e8eaec; --surface:#ffffff; --surface-2:#f3f4f5; --ink:#15181c; --muted:#5b646e; --line:#d2d7dc;
+  --hi-text:#8a5c00; --hi-soft:#fff2c2;
+  --ok:#1b874c; --ok-soft:#dcf2e4; --warn:#a35800; --warn-soft:#fdebd0; --bad:#c22f21; --bad-soft:#fbe0dc;
+  --grid:rgba(30,60,120,.06);
+  --shadow:0 1px 2px rgba(20,24,28,.06),0 8px 20px -12px rgba(20,24,28,.25); color-scheme:light}
+*{box-sizing:border-box}
+body{background-color:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:16px 40px}
+h1,h2,h3{text-wrap:balance;line-height:1.4;margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+ruby{ruby-position:over}
+rt{font-size:.52em;color:var(--muted);font-weight:500;letter-spacing:0;text-transform:none}
+body.nofuri rt{visibility:hidden}
+.hazard{height:10px;background:repeating-linear-gradient(-45deg,var(--hi) 0 14px,#111 14px 28px)}
+
+/* ---------- hero / HMI ---------- */
+.hero{position:relative;overflow:hidden;border-radius:14px;color:var(--panel-ink);background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--panel-line);box-shadow:var(--shadow)}
+.hero rt{color:var(--panel-muted)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 12px 22px,#3a414a 3px,transparent 4px),radial-gradient(circle at calc(100% - 12px) 22px,#3a414a 3px,transparent 4px),
+  radial-gradient(circle at 12px calc(100% - 12px),#3a414a 3px,transparent 4px),radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),#3a414a 3px,transparent 4px)}
+.hero-in{display:grid;grid-template-columns:1fr auto;gap:18px 22px;padding:18px 22px 22px;align-items:center}
+.hero-main{min-width:0;display:grid;gap:8px}
+.eyebrow{font-size:12px;letter-spacing:.04em;color:var(--hi-text);font-weight:700}
+.hero .eyebrow{color:var(--hi);padding-right:84px}
+.hero h1{font-family:var(--f-disp);font-size:clamp(34px,8.6vw,56px);font-weight:800;line-height:1.02;letter-spacing:.01em;text-transform:uppercase}
+.hero h1 .hl{display:inline-block;margin-top:10px;font-family:var(--f-body);font-weight:900;font-size:.62em;color:var(--hi-ink);background:var(--hi);padding:4px 10px 2px;border-radius:4px;letter-spacing:0}
+.hero h1 .hl rt{color:var(--panel-muted)}
+.lede{margin:0;color:var(--panel-muted);font-size:14px;max-width:48ch}
+.plate{display:inline-flex;align-items:stretch;border:1px solid #4a525c;border-radius:6px;overflow:hidden;font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.08em;width:max-content;max-width:100%;margin-top:4px;background:#0d0f12}
+.plate span{background:#3a414a;color:#cfd5db;font-size:12px;font-weight:700;padding:4px 8px;display:grid;place-items:center}
+.plate b{color:#fff;font-size:18px;font-weight:800;padding:2px 12px;letter-spacing:.12em}
+.plate i{font-style:normal;color:var(--panel-muted);font-size:12px;padding:4px 10px;border-left:1px solid #2d333b;display:grid;place-items:center;letter-spacing:.04em;text-transform:none;font-family:var(--f-body)}
+.hmi{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:stretch}
+.andon{width:30px;display:flex;flex-direction:column;gap:4px;padding:5px 4px;background:#0b0d10;border:1px solid #333a43;border-radius:8px;position:relative}
+.andon::after{content:"";position:absolute;left:50%;bottom:-12px;width:6px;height:12px;background:#333a43;transform:translateX(-50%)}
+.andon i{flex:1;min-height:24px;border-radius:5px;opacity:.18;transition:opacity .3s,box-shadow .3s}
+.andon .r{background:#ff3b30}.andon .y{background:#ffc400}.andon .g{background:#30d158}.andon .b{background:#4aa3ff}
+.andon[data-s="bad"] .r,.andon[data-s="warn"] .y,.andon[data-s="ok"] .g,.andon[data-s="standby"] .b{opacity:1;box-shadow:0 0 14px 2px currentColor}
+.andon[data-s="bad"] .r{color:#ff3b30}.andon[data-s="warn"] .y{color:#ffc400}.andon[data-s="ok"] .g{color:#30d158}.andon[data-s="standby"] .b{color:#4aa3ff}
+.lcd{background:#0a1a10;border:1px solid #23402d;border-radius:8px;padding:8px 14px 10px;display:grid;gap:2px;min-width:180px;box-shadow:inset 0 0 20px rgba(0,0,0,.6)}
+.lcd-l{font-family:var(--f-lcd);font-size:11px;color:#57c27e;letter-spacing:.08em;text-transform:uppercase}
+.lcd .num{font-family:var(--f-lcd);font-size:clamp(54px,14vw,78px);line-height:1;color:#7dffaa;text-shadow:0 0 12px rgba(125,255,170,.45);letter-spacing:.02em}
+.status{grid-column:1/-1;font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.08em;font-size:15px;font-weight:700;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-top:6px}
+.status small{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-weight:500;color:var(--panel-muted);font-size:12.5px}
+.status[data-s="ok"] b{color:#30d158}.status[data-s="warn"] b{color:#ffc400}.status[data-s="bad"] b{color:#ff5a47}.status[data-s="standby"] b{color:#4aa3ff}
+.qc{position:absolute;top:22px;right:18px;border:2px solid var(--hi);color:var(--hi);border-radius:6px;padding:2px 8px 3px;font-family:var(--f-disp);font-weight:800;font-size:20px;line-height:1.05;text-align:center;transform:rotate(-8deg);opacity:.9}
+.qc small{display:block;font-size:10px;letter-spacing:.14em}
+@media (max-width:600px){.hero-in{grid-template-columns:1fr}.lcd{min-width:0}}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;min-width:0;box-shadow:var(--shadow)}
+.stat .tag{grid-column:1/-1;font-family:var(--f-disp);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:4px}
+.stat .tag rt{letter-spacing:0}
+.stat span{font-size:12px;color:var(--muted);line-height:1.35;min-width:0}
+.stat span b{display:block;color:var(--ink);font-family:var(--f-mono);font-size:13px}
+.ring{--p:0;width:50px;height:50px;flex:0 0 50px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--hi) calc(var(--p)*1%),var(--line) 0)}
+.ring b{width:38px;height:38px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-family:var(--f-mono);font-size:12px;font-weight:500}
+.big{font-family:var(--f-lcd);font-size:32px;line-height:1;min-width:44px;text-align:center;color:var(--hi-text)}
+@media (max-width:640px){.stats{grid-template-columns:1fr 1fr}}
+
+.alert{margin-top:12px;background:var(--warn-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);padding:10px 12px 10px 14px;border-radius:10px;font-size:14px;position:relative;overflow:hidden}
+.alert::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:repeating-linear-gradient(-45deg,var(--hi) 0 6px,#111 6px 12px)}
+.alert b{color:var(--warn)}
+.toolrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+.toggle{font:inherit;font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.08em;font-size:14px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:4px 14px;border-radius:6px;cursor:pointer}
+.toggle[aria-pressed="true"]{background:var(--hi);border-color:var(--hi);color:var(--hi-ink)}
+header.top{display:grid;margin-bottom:6px}
+
+/* ---------- tabs ---------- */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;gap:6px;overflow-x:auto;padding-block:10px;margin:8px -16px 16px;padding-inline:16px;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.06em;font-size:15px;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:5px 14px;border-radius:6px;cursor:pointer;box-shadow:0 2px 0 var(--line)}
+nav.tabs button[aria-selected="true"]{background:var(--hi);border-color:var(--hi);color:var(--hi-ink);box-shadow:0 2px 0 #b38900}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible,label.btn:focus-within{outline:2px solid var(--hi);outline-offset:2px}
+section.panel{display:grid;gap:14px}
+.note{font-size:13px;color:var(--muted)}
+
+/* ---------- work orders ---------- */
+.week{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px 14px;display:grid;gap:8px;box-shadow:var(--shadow)}
+.week.now{border-color:var(--hi);box-shadow:0 0 0 1px var(--hi),var(--shadow)}
+.week.now::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;border-radius:10px 10px 0 0;background:repeating-linear-gradient(-45deg,var(--hi) 0 10px,#111 10px 20px)}
+.week.past{opacity:.82}
+.whead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.wnum{font-family:var(--f-disp);font-size:14px;font-weight:800;letter-spacing:.08em;color:var(--hi-ink);background:var(--hi);border-radius:4px;padding:0 8px}
+.wdate{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+.wtitle{font-weight:700;font-size:16.5px;flex:1 1 220px;min-width:0}
+.pill{font-size:11.5px;font-weight:700;padding:1px 9px;border-radius:4px;background:var(--hi-soft);color:var(--hi-text);white-space:nowrap;line-height:1.9;font-family:var(--f-body)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.run{background:var(--ok-soft);color:var(--ok)}
+.pill.run::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.pill rt{color:inherit;opacity:.8}
+.wbody{font-size:14px;display:grid;gap:4px}
+.wbody ul{margin:0;padding-left:18px}
+.wfoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.wfoot .bar{flex:1 1 120px}
+.wfoot span{font-size:12px;color:var(--muted);font-family:var(--f-mono);white-space:nowrap}
+.bar{height:8px;background:var(--line);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--hi);transition:width .4s}
+.linkbtn{font:inherit;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:2px 10px;border-radius:4px;cursor:pointer}
+.linkbtn:hover{border-color:var(--hi)}
+
+/* ---------- chapters ---------- */
+.bookhead{margin-top:8px;display:grid;gap:2px}
+.bookhead .eyebrow{font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.14em;font-size:13px}
+.bookhead h2{font-size:18px}
+details.ch{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+details.ch>summary{list-style:none;cursor:pointer;padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+details.ch>summary::-webkit-details-marker{display:none}
+details.ch[open]>summary{border-bottom:1px solid var(--line);background:var(--surface-2)}
+.chname{min-width:0}
+.chname .jp{font-size:19px;font-weight:900}
+.chname .tr{font-size:13px;color:var(--muted)}
+.chmeta{text-align:right;font-family:var(--f-mono);font-size:12px;color:var(--muted);line-height:1.5}
+.chbody{padding:12px 16px 14px;display:grid;gap:12px}
+.sec{border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:4px}
+.sechead{display:flex;gap:4px 8px;align-items:baseline;flex-wrap:wrap}
+.sechead .n{font-size:12px;font-weight:700;color:var(--hi-text)}
+.sechead .jp{font-weight:700;font-size:16px}
+.sechead .tr{font-size:13px;width:100%;line-height:1.5;color:var(--muted)}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:start;padding:6px 6px;border-radius:6px;cursor:pointer}
+.item:hover{background:var(--surface-2)}
+.item input{width:20px;height:20px;margin-top:12px;accent-color:var(--hi)}
+.item .txt{min-width:0}
+.item .jp{font-weight:500;font-size:15.5px}
+.item .tr{font-size:13px;display:block;line-height:1.5;color:var(--muted)}
+.item .pg{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-top:12px}
+.item.done .jp{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--hi)}
+.item.chk{background:var(--hi-soft)}
+
+/* ---------- generic ---------- */
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-disp);font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td.t{font-family:var(--f-mono);white-space:nowrap;color:var(--hi-text)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;box-shadow:var(--shadow)}
+.card h3{font-size:17px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.card h3 .no{font-family:var(--f-disp);font-size:14px;font-weight:800;letter-spacing:.06em;color:var(--hi-ink);background:var(--hi);border-radius:4px;padding:0 8px}
+.card ol,.card ul{margin:0;padding-left:20px;display:grid;gap:6px}
+form.log{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+form.log label,.ctl label{display:grid;gap:2px;font-size:12px;color:var(--muted);flex:1 1 140px;min-width:0}
+form.log input,form.log select,.ctl select{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:100%}
+.btn{font:inherit;font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.06em;font-weight:800;font-size:15px;border:0;border-radius:6px;padding:8px 16px;background:var(--hi);color:var(--hi-ink);cursor:pointer;box-shadow:0 3px 0 #b38900}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #b38900}
+.btn.ghost{background:transparent;color:var(--muted);padding:4px 8px;box-shadow:none;text-transform:none;font-family:var(--f-body);font-size:13px}
+.btn.line{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 0 var(--line)}
+.empty{color:var(--muted);font-size:14px;padding:12px}
+.ex{font-size:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto;line-height:2.1}
+
+/* ---------- kanban flashcards ---------- */
+.ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.ctl .chkl{display:flex;flex-direction:row;align-items:center;gap:6px;font-size:13px;color:var(--ink);flex:0 0 auto}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex:0 0 auto}
+.seg button{font:inherit;font-family:var(--f-disp);text-transform:uppercase;letter-spacing:.06em;font-size:14px;font-weight:700;border:0;background:var(--surface);color:var(--muted);padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--hi);color:var(--hi-ink)}
+.fc{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:0 18px 18px;display:grid;gap:14px;text-align:center;box-shadow:var(--shadow);overflow:hidden}
+.fc-meta{margin:0 -18px;padding:6px 14px;background:var(--hi);color:var(--hi-ink);font-size:12px;font-weight:700;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.fc-meta::before{content:"かんばん · KANBAN";font-family:var(--f-disp);letter-spacing:.12em}
+.fc-meta rt{color:#5a4a00}
+.fc-front{font-size:clamp(34px,10vw,54px);font-weight:900;line-height:1.35;overflow-wrap:anywhere;animation:pop .25s ease;padding-top:8px}
+.fc-front rt{font-size:.36em}
+.fc-back{display:grid;gap:10px;text-align:left;border-top:1px dashed var(--line);padding-top:12px;animation:pop .25s ease}
+.fc-back .yomi{font-size:20px;font-weight:700;color:var(--hi-text);text-align:center}
+.fc-back .arti{font-size:17px;font-weight:700;text-align:center}
+.mn{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
+.mn b{color:var(--hi-text)}
+.fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fc-actions .btn{padding:12px}
+.btn.again{background:var(--bad-soft);color:var(--bad);box-shadow:0 3px 0 color-mix(in srgb,var(--bad) 40%,transparent)}
+.btn.good{background:var(--ok-soft);color:var(--ok);box-shadow:0 3px 0 color-mix(in srgb,var(--ok) 40%,transparent)}
+.kanji .fc-front{font-size:clamp(70px,24vw,104px)}
+.vrow .w{font-size:18px;font-weight:700;white-space:nowrap}
+.vrow .mnc{font-size:13px;color:var(--muted)}
+.vstat{cursor:pointer;border:0;font:inherit}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- tips ---------- */
+.frm{display:grid;gap:8px}
+.frm div{background:var(--surface-2);border:1px solid var(--line);border-left:4px solid var(--hi);border-radius:6px;padding:8px 12px;font-size:14px;line-height:2.1;overflow-x:auto}
+.frm div b{color:var(--hi-text)}
+.frm small{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+.trap{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;align-items:baseline}
+.trap .k{font-weight:700;white-space:nowrap}
+.hari label{display:flex;gap:10px;align-items:flex-start;padding:4px 0;font-size:14px;cursor:pointer}
+.hari input{width:18px;height:18px;margin-top:6px;accent-color:var(--hi)}
+.q{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:8px;background:var(--surface-2)}
+.q .stem{font-weight:700;line-height:2.1}
+.q ol{list-style:none;padding:0;margin:0;display:grid;gap:4px}
+.q li{line-height:2.1;font-size:14.5px}
+.q li .lab{font-weight:700;color:var(--hi-text);margin-right:6px}
+.q details summary{cursor:pointer;font-weight:700;color:var(--hi-text);font-size:14px}
+.q details[open] summary{margin-bottom:6px}
+.q .ans{font-size:14px;display:grid;gap:4px}
+.mark{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-weight:900;font-size:13px;margin-right:6px}
+.mark.o{background:var(--ok-soft);color:var(--ok)} .mark.x{background:var(--bad-soft);color:var(--bad)}
+.dir{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dir div{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--surface-2);display:grid;gap:4px}
+.dir .big2{font-size:20px;font-weight:900}
+@media (max-width:520px){.dir{grid-template-columns:1fr}}
+
+/* ---------- footer nameplate ---------- */
+footer.foot{margin-top:28px;display:grid;gap:10px;font-size:13px;color:var(--muted)}
+.nameplate{display:grid;grid-template-columns:auto 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.nameplate .np-l{background:var(--hi);color:var(--hi-ink);font-family:var(--f-disp);font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:10px 12px;display:grid;place-items:center;font-size:14px;line-height:1.2;text-align:center}
+.nameplate .np-r{padding:8px 14px;display:grid;gap:0;font-size:13px}
+.nameplate .np-r b{font-family:var(--f-disp);font-size:22px;letter-spacing:.14em;color:var(--ink);text-transform:uppercase}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- motion props: gears, conveyor, line map ---------- */
+.gear{position:absolute;width:260px;height:260px;right:-90px;top:70px;border-radius:50%;pointer-events:none;opacity:.07;
+  background:radial-gradient(circle,transparent 0 17%,#fff 18% 60%,transparent 61%),repeating-conic-gradient(#fff 0 8deg,transparent 8deg 18deg);
+  -webkit-mask:radial-gradient(circle,#000 0 69%,transparent 70%);mask:radial-gradient(circle,#000 0 69%,transparent 70%);animation:spin 50s linear infinite}
+.gear.g2{width:150px;height:150px;right:120px;top:-60px;animation-direction:reverse;animation-duration:30s;opacity:.05}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-in{position:relative;z-index:1}
+.spec{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.spec span{font-size:12px;color:var(--panel-muted);border:1px solid var(--panel-line);background:rgba(0,0,0,.25);border-radius:4px;padding:2px 9px}
+.spec b{font-family:var(--f-lcd);color:var(--hi);font-weight:400;font-size:14px;margin-right:3px}
+.conveyor{position:relative;height:46px;border-top:1px solid var(--panel-line);background:linear-gradient(#101317,#0b0d10);overflow:hidden}
+.conveyor .belt{position:absolute;left:0;right:0;bottom:12px;height:7px;background:repeating-linear-gradient(90deg,#3a414a 0 12px,#22272e 12px 24px);animation:belt .6s linear infinite}
+.conveyor .rollers{position:absolute;left:0;right:0;bottom:2px;height:10px;background:radial-gradient(circle at 12px 5px,#4a525c 4px,transparent 5px) 0 0/28px 10px repeat-x}
+@keyframes belt{to{background-position:24px 0}}
+.part{position:absolute;bottom:19px;left:-40px;width:26px;height:16px;border-radius:3px;
+  background:radial-gradient(circle at 50% 50%,#0b0d10 0 3.5px,transparent 4.5px),linear-gradient(#b8c2cc,#7d8893);box-shadow:inset 0 -2px 0 rgba(0,0,0,.25);animation:ride 14s linear infinite}
+.part.p2{animation-delay:-2.3s;width:20px;height:20px;border-radius:50%}
+.part.p3{animation-delay:-4.6s;background:radial-gradient(circle at 50% 50%,#0b0d10 0 3.5px,transparent 4.5px),linear-gradient(#ffd54a,#e0a800)}
+.part.p4{animation-delay:-7s;width:32px}
+.part.p5{animation-delay:-9.3s;width:20px;height:20px;border-radius:50%}
+.part.p6{animation-delay:-11.6s}
+@keyframes ride{from{left:-40px}to{left:calc(100% + 10px)}}
+.linemap{gap:12px}
+.lm-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.lm-head b{font-family:var(--f-disp);font-size:18px;letter-spacing:.12em;text-transform:uppercase}
+.lm{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:12px 0;position:relative}
+.st{position:relative;font:inherit;font-family:var(--f-lcd);font-size:13px;height:34px;margin:0 3px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);cursor:pointer;display:grid;place-items:center;z-index:1}
+.st::after{content:"";position:absolute;left:100%;top:50%;width:8px;height:2px;background:var(--line);z-index:-1}
+.st:last-child::after{display:none}
+.st.done{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.st.late{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.st.run{background:var(--hi);border-color:var(--hi);color:var(--hi-ink);box-shadow:0 0 0 3px var(--hi-soft);animation:pulse 1.6s ease-in-out infinite}
+.st.goal{background:repeating-linear-gradient(-45deg,var(--hi) 0 6px,#111 6px 12px);border-color:var(--hi);color:#fff;font-family:var(--f-body);font-weight:900;text-shadow:0 1px 2px #000}
+@keyframes pulse{50%{box-shadow:0 0 0 6px transparent}}
+.lm-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.lm-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+.lm-legend .l-done{background:var(--ok-soft);border-color:var(--ok)}.lm-legend .l-run{background:var(--hi);border-color:var(--hi)}.lm-legend .l-late{background:var(--bad-soft);border-color:var(--bad)}.lm-legend .l-todo{background:var(--surface-2)}
+.week{scroll-margin-top:80px}
+@media (prefers-reduced-motion:reduce){.part{display:none}}
+
+details.backup{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:10px;box-shadow:var(--shadow)}
+details.backup>summary{cursor:pointer;padding:10px 14px;font-weight:700;font-size:14px}
+.bk{padding:0 14px 14px;display:grid;gap:10px}
+.bkrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bk textarea{font-family:var(--f-mono);font-size:12px;width:100%;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);resize:vertical}
+label.btn{display:inline-block}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <section class="hero" aria-label="Panel status belajar">
+    <div class="hazard"></div>
+    <div class="gear" aria-hidden="true"></div><div class="gear g2" aria-hidden="true"></div>
+    <div class="qc" aria-hidden="true"><small>QC</small>合格<small>PASS</small></div>
+    <div class="hero-in">
+      <div class="hero-main">
+        <div class="eyebrow" id="eyebrow"></div>
+        <h1>Roadmap Lulus<br><span class="hl"><ruby>生産<rt>せいさん</rt></ruby><ruby>管理<rt>かんり</rt></ruby> 3<ruby>級<rt>きゅう</rt></ruby></span></h1>
+        <p class="lede">18 minggu produksi ilmu: tracker materi berfurigana, kartu kanban kosakata &amp; kanji, rumus, dan tips lulus.</p>
+        <div class="spec"><span><b>18</b> work order</span><span><b>10</b> bab</span><span><b>239</b> kata &amp; kanji</span><span><b>11</b> rumus</span></div>
+      </div>
+      <div class="hmi">
+        <div class="andon" id="andon" data-s="standby" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i><i class="b"></i></div>
+        <div class="lcd"><div class="lcd-l">Countdown · <ruby>試験<rt>しけん</rt></ruby>まで</div><div class="num" id="sDays">–</div><div class="lcd-l">Hari · 14 Feb 2027 · <ruby>後期<rt>こうき</rt></ruby></div></div>
+        <div class="status" id="andonTxt" data-s="standby"><b>Standby</b></div>
+      </div>
+    </div>
+    <div class="conveyor" aria-hidden="true"><div class="belt"></div><i class="part p1"></i><i class="part p2"></i><i class="part p3"></i><i class="part p4"></i><i class="part p5"></i><i class="part p6"></i><div class="rollers"></div></div>
+  </section>
+  <div class="stats">
+    <div class="stat"><div class="tag">Output · <ruby>生産実績<rt>せいさんじっせき</rt></ruby></div><div class="ring" id="rPct"><b id="sPct">0%</b></div><span>subbab selesai<b id="sPctN">0/0</b></span></div>
+    <div class="stat"><div class="tag">Kanban · <ruby>暗記<rt>あんき</rt></ruby></div><div class="ring" id="rVoc"><b id="sVocP">0%</b></div><span>kata &amp; kanji hafal<b id="sVoc">0</b></span></div>
+    <div class="stat"><div class="tag">Streak · <ruby>連続<rt>れんぞく</rt></ruby></div><div class="big" id="sStreak">0</div><span>hari belajar berturut-turut</span></div>
+    <div class="stat"><div class="tag">Shift · <ruby>週<rt>しゅう</rt></ruby></div><div class="big" id="sWeek">–</div><span>minggu ke-, dari 18 minggu</span></div>
+  </div>
+  <div class="alert" id="regAlert"><b>Pendaftaran <ruby>後期<rt>こうき</rt></ruby>:</b> 5 Okt – <b>4 Des 2026</b>. Daftar dulu sebelum Minggu 8, jangan sampai lewat.</div>
+  <div class="toolrow">
+    <span class="note" id="saveNote">Memuat progres…</span>
+    <button class="toggle" id="furiBtn" aria-pressed="true">Furigana: ON</button>
+  </div>
+  <details class="backup" id="backupBox">
+    <summary>Backup &amp; pindah perangkat</summary>
+    <div class="bk">
+      <p class="note">Progres tersimpan otomatis di browser ini. Untuk pindah ke HP/laptop lain, atau berjaga-jaga sebelum menghapus data browser, simpan backup.</p>
+      <div class="bkrow"><button class="btn" id="bkDown" type="button">Unduh file backup</button>
+      <label class="btn line" for="bkFile">Muat dari file<input type="file" id="bkFile" accept=".json,application/json" hidden></label></div>
+      <label for="bkCode" class="note">Atau salin/tempel kode backup (misalnya kirim ke diri sendiri lewat LINE/WhatsApp):</label>
+      <textarea id="bkCode" rows="3" spellcheck="false"></textarea>
+      <div class="bkrow"><button class="btn line" id="bkCopy" type="button">Buat &amp; salin kode</button><button class="btn line" id="bkPaste" type="button">Pulihkan dari kode</button><button class="btn ghost" id="bkReset" type="button">Hapus semua progres</button></div>
+      <p class="note" id="bkMsg" aria-live="polite"></p>
+    </div>
+  </details>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="roadmap" aria-selected="true">Roadmap</button>
+  <button role="tab" data-tab="materi" aria-selected="false">Materi &amp; Tracker</button>
+  <button role="tab" data-tab="kosakata" aria-selected="false">Kosakata &amp; Kanji</button>
+  <button role="tab" data-tab="latihan" aria-selected="false">Latihan Soal</button>
+  <button role="tab" data-tab="tips" aria-selected="false">Tips Lulus</button>
+  <button role="tab" data-tab="cara" aria-selected="false">Cara Baca &amp; Translate</button>
+</nav>
+
+<section class="panel" id="p-roadmap"></section>
+<section class="panel" id="p-materi" hidden></section>
+<section class="panel" id="p-kosakata" hidden></section>
+<section class="panel" id="p-latihan" hidden></section>
+<section class="panel" id="p-tips" hidden></section>
+<section class="panel" id="p-cara" hidden></section>
+<footer class="foot">
+  <div class="nameplate"><div class="np-l">Made<br>by</div><div class="np-r"><b>Joseph</b><span>Roadmap, tracker &amp; tips · 2026 · disusun dari lantai produksi di Jepang</span></div></div>
+  <div>Untuk teman-teman yang sedang belajar <ruby>ビジネス・キャリア検定<rt>けんてい</rt></ruby> 3<ruby>級<rt>きゅう</rt></ruby> <ruby>生産管理<rt>せいさんかんり</rt></ruby>オペレーション. ご安全に！がんばろう！</div>
+  <div>Situs belajar pribadi, bukan situs resmi JAVADA. Judul bab mengikuti daftar isi buku 標準テキスト; pelajari isi lengkapnya dari buku asli. Jadwal &amp; format ujian selalu cek di situs resmi.</div>
+</footer>
+</div>
+
+<script>
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---------- FURIGANA DICTIONARY ----------
+// format: kanji{reading} ; okurigana stays outside braces
+const DICT_SRC=`
+作業{さぎょう} 管理{かんり} 基礎{きそ} 生産{せいさん} 構造{こうぞう} 活動{かつどう} 考{かんが}え方{かた} 意義{いぎ} 構成{こうせい} 分析{ぶんせき} 手法{しゅほう}
+改善{かいぜん} 方向{ほうこう} 工程{こうてい} 動作{どうさ} 研究{けんきゅう} 時間{じかん} 稼働{かどう} 連合{れんごう} 進{すす}め方{かた} 治工具{じこうぐ}
+整理{せいり} 整頓{せいとん} 清掃{せいそう} 清潔{せいけつ} 躾{しつけ} 目的{もくてき} 形態{けいたい} 分類{ぶんるい} 受注{じゅちゅう} 仕方{しかた} 品種{ひんしゅ}
+生産量{せいさんりょう} 製品{せいひん} 流{なが}し方{かた} 日程{にってい} 計画{けいかく} 工数{こうすう} 代表的{だいひょうてき} 統制{とうせい} 業務{ぎょうむ}
+製作{せいさく} 手配{てはい} 差立{さしたて} 進捗{しんちょく} 現品{げんぴん} 余力{よりょく} 事後{じご} 処理{しょり} 理解度{りかいど} 設備{せつび} 保全{ほぜん}
+予防{よぼう} 日常{にちじょう} 総合{そうごう} 効率{こうりつ} 自主{じしゅ} 劣化{れっか} 原因{げんいん} 対策{たいさく} 曲線{きょくせん} 重点{じゅうてん}
+箇所{かしょ} 検査{けんさ} 整備{せいび} 修理{しゅうり} 記録{きろく} 資材{しざい} 在庫{ざいこ} 購入{こうにゅう} 発注{はっちゅう} 費用{ひよう} 部品{ぶひん}
+所要量{しょようりょう} 算出{さんしゅつ} 種類{しゅるい} 機能{きのう} 方式{ほうしき} 安全{あんぜん} 入出庫{にゅうしゅっこ} 情報{じょうほう} 方法{ほうほう}
+棚卸{たなおろし} 資産{しさん} 評価{ひょうか} 購買{こうばい} 倫理{りんり} 取引先{とりひきさき} 運搬{うんぱん} 物流{ぶつりゅう} 範囲{はんい} 保管{ほかん}
+倉庫{そうこ} 荷役{にやく} 合理化{ごうりか} 包装{ほうそう} 役割{やくわり} 品質{ひんしつ} 特性{とくせい} 活用{かつよう} 取{と}り方{かた} 表{あらわ}し方{かた}
+解析{かいせき} 全数{ぜんすう} 抜取{ぬきとり} 主義{しゅぎ} 源流{げんりゅう} 保証{ほしょう} 製造物{せいぞうぶつ} 責任{せきにん} 国際化{こくさいか} 原則{げんそく}
+規格{きかく} 原価{げんか} 基本的{きほんてき} 基本法{きほんほう} 基本{きほん} 体系{たいけい} 開発{かいはつ} 製造{せいぞう} 総原価{そうげんか} 材料費{ざいりょうひ}
+労務費{ろうむひ} 経費{けいひ} 直接費{ちょくせつひ} 間接費{かんせつひ} 固定費{こていひ} 変動費{へんどうひ} 実施{じっし} 概念{がいねん} 計算{けいさん}
+実際{じっさい} 標準{ひょうじゅん} 差異{さい} 企画{きかく} 設計{せっけい} 目標{もくひょう} 見積{みつ}もり 低減{ていげん} 直接{ちょくせつ} 材料{ざいりょう}
+間接{かんせつ} 納期{のうき} 顧客{こきゃく} 遵守{じゅんしゅ} 遅延{ちえん} 発生{はっせい} 要因{よういん} 部門{ぶもん} 目{め} 見{み}る 衛生{えいせい}
+安衛法{あんえいほう} 概要{がいよう} 第{だい} 章{しょう} 体制{たいせい} 構築{こうちく} 等{など} 関{かん}する 法規制{ほうきせい} 災害{さいがい} 統計{とうけい}
+物的{ぶってき} 安全化{あんぜんか} 特定{とくてい} 機械{きかい} 許可{きょか} 装置{そうち} 具備{ぐび} 定期{ていき} 人的{じんてき} 労働者{ろうどうしゃ}
+就業{しゅうぎょう} 措置{そち} 推進{すいしん} 労働{ろうどう} 職業性{しょくぎょうせい} 疾病{しっぺい} 環境{かんきょう} 問題{もんだい} 歴史的{れきしてき}
+経緯{けいい} 公害{こうがい} 始{はじ}まり 高度{こうど} 経済{けいざい} 成長期{せいちょうき} 強化{きょうか} 関連{かんれん} 防止{ぼうし} 大気{たいき}
+汚染{おせん} 水質{すいしつ} 汚濁{おだく} 土壌{どじょう} 騒音{そうおん} 振動{しんどう} 悪臭{あくしゅう} 工場{こうじょう} 事業場{じぎょうじょう}
+取{と}り組{く}み 維持{いじ} 持続{じぞく} 可能{かのう} 世界的{せかいてき} 専門{せんもん} 知識{ちしき} 共通{きょうつう} 級{きゅう} 版{はん} 節{せつ}
+過去問題集{かこもんだいしゅう} 過去問{かこもん} 受験票{じゅけんひょう} 検定{けんてい} 試験問題{しけんもんだい} 漢字{かんじ} 切{き}り粉{こ} 適切{てきせつ}
+不適切{ふてきせつ} 正{ただ}しい 誤{あやま}っている 後期{こうき}
+稼働時間{かどうじかん} 総時間{そうじかん} 時間稼働率{じかんかどうりつ} 性能稼働率{せいのうかどうりつ} 良品率{りょうひんりつ} 稼働率{かどうりつ}
+労働災害{ろうどうさいがい} 死傷者数{ししょうしゃすう} 延{の}べ 実労働時間数{じつろうどうじかんすう} 労働損失日数{ろうどうそんしつにっすう} 度数率{どすうりつ}
+強度率{きょうどりつ} 損益分岐点{そんえきぶんきてん} 売上高{うりあげだか} 調達期間{ちょうたつきかん} 平均{へいきん} 使用量{しようりょう} 日{にち}
+安全在庫{あんぜんざいこ} 発注点{はっちゅうてん} 標準時間{ひょうじゅんじかん} 正味時間{しょうみじかん} 余裕率{よゆうりつ} 経費{けいひ}
+製造間接費{せいぞうかんせつひ} 販売費{はんばいひ} 一般管理費{いっぱんかんりひ} 製造原価{せいぞうげんか} 不良率{ふりょうりつ} 不良品数{ふりょうひんすう}
+検査数{けんさすう} 歩留{ぶど}まり 良品{りょうひん} 投入量{とうにゅうりょう} 必{かなら}ず 常{つね}に 絶対{ぜったい} 一切{いっさい}
+原則{げんそく} 一般{いっぱん} 本人確認{ほんにんかくにん} 鉛筆{えんぴつ} 消{け}しゴム 時計{とけい} 記述{きじゅつ} 最{もっと}も 次{つぎ}
+組{く}み合{あ}わせ 選{えら}びなさい 該当{がいとう} 電卓{でんたく} 写真付{しゃしんつ}き 証明書{しょうめいしょ} 経済的発注量{けいざいてきはっちゅうりょう}
+直接労務費{ちょくせつろうむひ} 直接材料費{ちょくせつざいりょうひ} 直接経費{ちょくせつけいひ} 外掛{そとが}け 内掛{うちが}け 試験{しけん} 会場{かいじょう}
+定量発注{ていりょうはっちゅう} 定量発注方式{ていりょうはっちゅうほうしき} 定期発注方式{ていきはっちゅうほうしき} 点検{てんけん} 部品交換{ぶひんこうかん} 行{おこな}う 日常的{にちじょうてき} 偶発故障期{ぐうはつこしょうき} 摩耗故障期{まもうこしょうき} 故障率{こしょうりつ} 急激{きゅうげき} 増加{ぞうか} 期間{きかん} 需要{じゅよう} 変動{へんどう} 備{そな}えて 持{も}つ 品目{ひんもく} 同{おな}じ 多{おお}けれ 多{おお}い 発注時期{はっちゅうじき} 一定{いってい} 発注量{はっちゅうりょう} 毎回{まいかい} 変{か}わる 自主保全{じしゅほぜん} 予防保全{よぼうほぜん} 事後保全{じごほぜん} 最{もっと}も 増{ふ}える 減{へ}る 高{たか}い 低{ひく}い 必要{ひつよう} 望{のぞ}ましい 限{かぎ}らない 限{かぎ} 完了{かんりょう} 稼働中{かどうちゅう} 増{ふ} 減{へ} 高{たか} 低{ひく} 望{のぞ} 前{まえ} 定期発注{ていきはっちゅう} 輸送{ゆそう} 産出量{さんしゅつりょう} 在留{ざいりゅう} 段取{だんど}り 故障{こしょう}
+`;
+const DICT={}; let MAXL=1;
+DICT_SRC.split(/\s+/).filter(Boolean).forEach(a=>{const k=a.replace(/\{[^}]*\}/g,'');DICT[k]=a;MAXL=Math.max(MAXL,k.length)});
+const KJ=/[㐀-鿿々]/; const MISS=new Set();
+const annot=a=>a.replace(/([㐀-鿿々]+)\{([^}]+)\}/g,(m,k,r)=>`<ruby>${k}<rt>${r}</rt></ruby>`);
+function R(s){let o='',i=0;s=String(s);while(i<s.length){let hit=null;if(KJ.test(s[i])){for(let L=Math.min(MAXL,s.length-i);L>0;L--){const k=s.substr(i,L);if(DICT[k]){hit=k;break}}}if(hit){o+=annot(DICT[hit]);i+=hit.length}else{if(KJ.test(s[i]))MISS.add(s[i]);o+=esc(s[i]);i++}}return o}
+// whole word with a known reading (vocab)
+const RW=(w,y)=>`<ruby>${esc(w)}<rt>${esc(y)}</rt></ruby>`;
+
+// ---------- DATA ----------
+// [jp, yomi, terjemahan, halaman]
+const BOOKS=[
+{code:'S',jp:'専門知識 · 生産管理オペレーション 3級 (第4版)',tr:'Buku pengetahuan khusus — dibaca duluan (Minggu 1–10)',ch:[
+ {jp:'作業管理基礎',yo:'さぎょうかんりきそ',tr:'Dasar manajemen kerja',p:1,secs:[
+  ['生産システム','せいさんシステム','Sistem produksi',2,[
+    ['生産システムの構造','','Struktur sistem produksi',3],
+    ['管理活動と生産管理','','Aktivitas manajemen & manajemen produksi',7]]],
+  ['作業管理の考え方','','Konsep manajemen kerja',10,[
+    ['作業管理の意義','','Makna & tujuan manajemen kerja',10],
+    ['作業管理の構成','','Struktur manajemen kerja',16]]],
+  ['IE分析手法と改善方向','','Metode analisis IE & arah perbaikan',22,[
+    ['工程分析','','Analisis proses',22],
+    ['動作研究','','Studi gerakan (motion study)',34],
+    ['時間研究','','Studi waktu (time study)',40],
+    ['稼働分析','','Analisis tingkat operasi / utilisasi',48],
+    ['連合作業分析','','Analisis kerja gabungan (orang–mesin)',56]]],
+  ['作業改善の進め方','','Cara menjalankan perbaikan kerja',65,[
+    ['作業改善の考え方','','Konsep perbaikan kerja',65],
+    ['動作改善','','Perbaikan gerakan',71],
+    ['作業改善','','Perbaikan kerja',77],
+    ['治工具','','Jig & alat bantu kerja',79]]],
+  ['5S','','5S',82,[
+    ['整理・整頓','','Seiri (memilah) · Seiton (menata)',82],
+    ['清掃・清潔','','Seisō (membersihkan) · Seiketsu (menjaga bersih)',84],
+    ['躾','','Shitsuke (disiplin / pembiasaan)',85]]]],chk:87},
+ {jp:'工程管理基礎',tr:'Dasar manajemen proses produksi',p:91,secs:[
+  ['工程管理の考え方','','Konsep manajemen proses',92,[
+    ['工程管理の目的と意義','','Tujuan & makna manajemen proses',93],
+    ['工程管理の構成','','Struktur manajemen proses',95]]],
+  ['生産形態の分類','','Klasifikasi bentuk produksi',101,[
+    ['受注の仕方による分類','','Berdasarkan cara menerima pesanan',102],
+    ['生産品種と生産量による分類','','Berdasarkan jenis & volume produksi',103],
+    ['製品の流し方による分類','','Berdasarkan cara mengalirkan produk',105]]],
+  ['日程計画','','Perencanaan jadwal',108,[
+    ['工数と日程','','Jam kerja (man-hour) & jadwal',108],
+    ['日程計画の代表的な手法','','Metode utama penjadwalan',113]]],
+  ['生産統制','','Pengendalian produksi',121,[
+    ['生産計画と生産統制の管理業務','','Tugas perencanaan & pengendalian produksi',121],
+    ['製作手配','','Pengaturan pembuatan',121],
+    ['作業手配（差立）','','Pembagian kerja (dispatching)',122],
+    ['進捗管理','','Kontrol progres',124],
+    ['現品管理','','Kontrol barang fisik',126],
+    ['余力管理','','Kontrol kapasitas sisa',127],
+    ['事後処理','','Penanganan sesudahnya (follow-up)',128]]]],chk:132},
+ {jp:'設備管理基礎',tr:'Dasar manajemen mesin & fasilitas',p:135,secs:[
+  ['設備管理の考え方','','Konsep manajemen fasilitas',136,[
+    ['設備管理の意義','','Makna manajemen fasilitas',136],
+    ['設備管理の構成','','Struktur manajemen fasilitas',140]]],
+  ['設備保全','','Pemeliharaan fasilitas',146,[
+    ['設備保全の目的','','Tujuan pemeliharaan',147],
+    ['生産保全','','Productive maintenance (PM)',147],
+    ['事後保全と予防保全','','Perbaikan setelah rusak & pemeliharaan pencegahan',150],
+    ['日常保全','','Pemeliharaan harian',153],
+    ['設備総合効率','','Efektivitas mesin total (OEE)',154],
+    ['自主管理活動','','Aktivitas manajemen mandiri',157]]],
+  ['設備の劣化','','Penurunan kondisi fasilitas',161,[
+    ['設備劣化の原因と対策','','Penyebab & penanggulangan kerusakan',161],
+    ['バスタブ曲線と保全','','Kurva bathtub & pemeliharaan',164]]],
+  ['設備保全システム','','Sistem pemeliharaan fasilitas',167,[
+    ['重点設備・重点箇所の保全','','Pemeliharaan mesin & titik prioritas',167],
+    ['検査・整備・修理','','Inspeksi · servis · perbaikan',170],
+    ['保全の記録','','Catatan pemeliharaan',173]]]],chk:176},
+ {jp:'資材・在庫管理の基礎',tr:'Dasar manajemen material & stok',p:179,secs:[
+  ['資材管理の考え方','','Konsep manajemen material',180,[
+    ['資材管理の意義','','Makna manajemen material',180],
+    ['資材管理の構成','','Struktur manajemen material',182]]],
+  ['資材計画','','Perencanaan material',184,[
+    ['資材購入計画','','Rencana pembelian material',184],
+    ['発注費用','','Biaya pemesanan',189],
+    ['部品所要量の算出','','Menghitung kebutuhan komponen',191]]],
+  ['在庫管理','','Manajemen stok',196,[
+    ['在庫の種類と機能','','Jenis & fungsi stok',196],
+    ['発注方式と安全在庫','','Metode pemesanan & safety stock',200],
+    ['ABC管理','','Manajemen / analisis ABC',204]]],
+  ['入出庫管理','','Kontrol barang masuk-keluar gudang',208,[
+    ['入出庫管理と情報','','Kontrol keluar-masuk & informasi',208],
+    ['入出庫の方法','','Cara keluar-masuk barang',210]]],
+  ['棚卸','','Stock opname',212,[
+    ['棚卸方法','','Metode stock opname',212],
+    ['棚卸資産評価','','Penilaian aset persediaan',215]]],
+  ['購買管理','','Manajemen pembelian',218,[
+    ['購買の方法と考え方','','Cara & konsep pembelian',218],
+    ['購買倫理','','Etika pembelian',222],
+    ['取引先の管理','','Manajemen pemasok / mitra',223]]]],chk:226},
+ {jp:'運搬・物流管理の基礎',tr:'Dasar pengangkutan & logistik',p:229,secs:[
+  ['物流管理の考え方','','Konsep manajemen logistik',230,[
+    ['物流管理の意義','','Makna manajemen logistik',230],
+    ['物流の範囲','','Cakupan logistik',240],
+    ['物流の業務','','Pekerjaan logistik',250]]],
+  ['保管','','Penyimpanan',256,[
+    ['保管機能','','Fungsi penyimpanan',256],
+    ['倉庫機能','','Fungsi gudang',259],
+    ['ロケーション管理','','Manajemen lokasi (alamat rak)',263]]],
+  ['荷役','','Bongkar muat (material handling)',267,[
+    ['荷役機能','','Fungsi bongkar muat',267],
+    ['ピッキング','','Picking (mengambil barang pesanan)',267]]],
+  ['運搬','','Pengangkutan (dalam pabrik)',272,[
+    ['運搬機能','','Fungsi pengangkutan',272],
+    ['運搬の合理化','','Rasionalisasi / efisiensi pengangkutan',274]]],
+  ['包装','','Pengemasan',277,[
+    ['包装の役割','','Peran kemasan',277],
+    ['包装の種類と機能','','Jenis & fungsi kemasan',277]]]],chk:282}
+]},
+{code:'K',jp:'共通知識 · 生産管理 3級 (第2版)',tr:'Buku pengetahuan umum — dibaca kedua (Minggu 11–16)',ch:[
+ {jp:'品質管理',tr:'Manajemen kualitas',p:1,secs:[
+  ['品質管理の考え方','','Konsep manajemen kualitas',2,[
+    ['品質管理の意義','','Makna manajemen kualitas',2],
+    ['品質と品質特性','','Kualitas & karakteristik kualitas',4],
+    ['管理のサイクルと改善','','Siklus manajemen (PDCA) & perbaikan',8]]],
+  ['データの活用','','Pemanfaatan data',10,[
+    ['データの取り方','','Cara mengambil data',10],
+    ['データの表し方','','Cara menyajikan data (grafik, QC 7 tools)',15],
+    ['データの解析','','Analisis data',30]]],
+  ['検査','','Inspeksi',35,[
+    ['検査の目的と方法','','Tujuan & metode inspeksi',35],
+    ['全数検査と抜取検査','','Inspeksi 100% & inspeksi sampling',37],
+    ['検査と管理','','Inspeksi & manajemen',39]]],
+  ['品質改善の進め方','','Cara menjalankan perbaikan kualitas',41,[
+    ['改善の進め方','','Langkah perbaikan',41],
+    ['データ主義','','Berbasis data (bukan perasaan)',42],
+    ['源流主義','','Cegah dari hulu / sumber masalah',43]]],
+  ['品質保証','','Jaminan kualitas',46,[
+    ['品質保証の意義と進め方','','Makna & cara jaminan kualitas',46],
+    ['品質保証とクレーム処理','','Jaminan kualitas & penanganan komplain',50],
+    ['製造物責任（PL）','','Tanggung jawab produk (Product Liability)',53]]],
+  ['品質マネジメントシステム','','Sistem manajemen mutu',56,[
+    ['品質マネジメントシステムの国際化','','Internasionalisasi sistem mutu',56],
+    ['ISO9000シリーズの構成','','Struktur seri ISO 9000',58],
+    ['品質マネジメントシステムの原則','','Prinsip sistem manajemen mutu',59],
+    ['ISO9001:2015規格の構成','','Struktur standar ISO 9001:2015',60],
+    ['PDCAサイクルと品質マネジメント','','Siklus PDCA & manajemen mutu',63]]]],chk:64},
+ {jp:'原価管理',tr:'Manajemen biaya (cost)',p:67,secs:[
+  ['原価管理の基本的な考え方','','Konsep dasar manajemen biaya',68,[
+    ['原価管理の体系','','Sistem manajemen biaya',68],
+    ['プランニングとコントロール','','Perencanaan & pengendalian',71],
+    ['製品の開発・生産活動と製造原価','','Pengembangan, produksi & biaya produksi',73]]],
+  ['原価の構成','','Komponen biaya',81,[
+    ['製造原価と総原価','','Biaya produksi & biaya total',81],
+    ['材料費・労務費・経費','','Biaya bahan · tenaga kerja · overhead (menurut bentuk)',82],
+    ['直接費・間接費','','Biaya langsung · tidak langsung',83],
+    ['固定費・変動費','','Biaya tetap · variabel (menurut tingkat operasi)',84],
+    ['製品開発から生産実施までの原価概念','','Konsep biaya dari pengembangan s.d. produksi',87],
+    ['原価概念の整理','','Rangkuman konsep biaya',89]]],
+  ['原価計算','','Perhitungan biaya',92,[
+    ['原価計算','','Perhitungan biaya',92],
+    ['実際原価計算','','Perhitungan biaya aktual',98],
+    ['標準原価計算','','Perhitungan biaya standar',102],
+    ['原価差異分析','','Analisis selisih biaya',104]]],
+  ['原価企画','','Perencanaan biaya (target costing)',109,[
+    ['原価企画の意義','','Makna perencanaan biaya',109],
+    ['製品開発・設計工程と原価企画活動のフェーズ','','Tahap desain & fase target costing',117],
+    ['目標原価','','Biaya target',121],
+    ['原価見積もり','','Estimasi biaya',124]]],
+  ['原価低減','','Pengurangan biaya',130,[
+    ['直接材料費の原価低減','','Mengurangi biaya bahan langsung',131],
+    ['直接労務費の原価低減','','Mengurangi biaya tenaga kerja langsung',133],
+    ['直接経費の原価低減','','Mengurangi biaya overhead langsung',134],
+    ['間接費の原価低減','','Mengurangi biaya tidak langsung',135]]]],chk:137},
+ {jp:'納期管理',tr:'Manajemen tenggat pengiriman',p:139,secs:[
+  ['納期管理の考え方','','Konsep manajemen tenggat',140,[
+    ['納期管理の意義','','Makna manajemen tenggat',140],
+    ['顧客と納期遵守','','Pelanggan & kepatuhan tenggat',141]]],
+  ['納期遅延の発生要因と対策','','Penyebab keterlambatan & penanggulangannya',143,[
+    ['設計部門での要因と対策','','Di bagian desain',144],
+    ['生産計画部門での要因と対策','','Di bagian perencanaan produksi',144],
+    ['資材部門での要因と対策','','Di bagian material',148],
+    ['製造部門での要因と対策','','Di bagian manufaktur',151],
+    ['物流部門での要因と対策','','Di bagian logistik',155]]],
+  ['納期管理の手法','','Metode manajemen tenggat',157,[
+    ['納期遅延・日程遅延の分析','','Analisis keterlambatan kirim & jadwal',157],
+    ['進捗管理の手法','','Metode kontrol progres',160]]],
+  ['目で見る管理','','Manajemen visual',166,[
+    ['生産計画・統制での目で見る管理','','Visual di perencanaan & kontrol produksi',167],
+    ['資材・在庫・物流での目で見る管理','','Visual di material, stok & logistik',168]]]],chk:170},
+ {jp:'安全衛生管理',tr:'Manajemen keselamatan & kesehatan kerja (K3)',p:173,secs:[
+  ['安衛法の概要','','Ringkasan UU K3 Jepang',174,[
+    ['安衛法の概要1（第1章〜第4章）','','Ringkasan UU K3 bagian 1 (bab 1–4)',174],
+    ['安衛法の概要2（第5章〜第12章）','','Ringkasan UU K3 bagian 2 (bab 5–12)',176]]],
+  ['安全衛生管理体制の構築等','','Membangun sistem organisasi K3',178,[
+    ['管理体制に関する法規制','','Aturan hukum tentang sistem manajemen',178],
+    ['災害統計等','','Statistik kecelakaan kerja',180]]],
+  ['物的安全化の基本','','Dasar keselamatan dari sisi mesin/benda',182,[
+    ['特定機械等の製造許可・検査など','','Izin produksi & inspeksi mesin khusus',182],
+    ['安全装置等の具備','','Kelengkapan alat pengaman',183],
+    ['定期自主検査','','Inspeksi mandiri berkala',184]]],
+  ['人的安全化の基本','','Dasar keselamatan dari sisi manusia',185,[
+    ['労働者の就業にあたっての措置','','Langkah saat pekerja mulai bekerja',185],
+    ['5S活動の推進','','Mendorong kegiatan 5S',187]]],
+  ['労働衛生管理','','Manajemen kesehatan kerja',189,[
+    ['労働衛生管理の基本','','Dasar kesehatan kerja',189],
+    ['職業性疾病の予防','','Pencegahan penyakit akibat kerja',191]]]],chk:193},
+ {jp:'環境管理',tr:'Manajemen lingkungan',p:197,secs:[
+  ['環境問題の歴史的経緯と環境基本法','','Sejarah masalah lingkungan & UU Dasar Lingkungan',198,[
+    ['公害問題の始まり','','Awal masalah polusi',198],
+    ['高度経済成長期の公害問題','','Polusi di masa pertumbuhan ekonomi pesat',199],
+    ['公害対策の強化','','Penguatan penanggulangan polusi',199],
+    ['環境基本法と関連法規制','','UU Dasar Lingkungan & aturan terkait',200]]],
+  ['公害防止対策','','Pencegahan polusi',203,[
+    ['大気汚染とその対策','','Polusi udara & penanggulangannya',203],
+    ['水質汚濁とその対策','','Pencemaran air',205],
+    ['土壌汚染とその対策','','Pencemaran tanah',206],
+    ['騒音・振動とその対策','','Kebisingan & getaran',207],
+    ['悪臭とその対策','','Bau tidak sedap',208]]],
+  ['工場・事業場における環境保全の取り組み','','Upaya pelestarian lingkungan di pabrik',209,[
+    ['環境保全の維持と改善','','Menjaga & memperbaiki lingkungan',209],
+    ['環境改善のしくみと環境マネジメントシステム','','Mekanisme perbaikan & sistem manajemen lingkungan (ISO 14001)',211]]],
+  ['持続可能な開発目標','','Tujuan Pembangunan Berkelanjutan (SDGs)',214,[
+    ['世界的な環境問題への取り組み','','Upaya global atas masalah lingkungan',214],
+    ['持続可能な開発目標（SDGs）とは','','Apa itu SDGs',215],
+    ['SDGsの17のゴール','','17 tujuan SDGs',216]]]],chk:219}
+]}];
+
+// ---------- KOSAKATA SULIT ----------
+// [kata, yomi, arti, cara ingat]
+const VOCAB={
+S1:[
+ ['稼働','かどう','beroperasi (mesin/orang sedang bekerja)','稼 = mencari nafkah + 働 = bekerja → mesin yang <b>bekerja menghasilkan</b>.'],
+ ['稼働率','かどうりつ','tingkat operasi / utilisasi','率 = rasio/persen. 稼働率 80% = mesin benar-benar jalan 80% dari waktu.'],
+ ['工程分析','こうていぶんせき','analisis proses','工程 = tahap proses; 分析 = 分 (bagi) + 析 (urai): memecah proses jadi langkah kecil.'],
+ ['動作研究','どうさけんきゅう','studi gerakan','動 gerak + 作 buat. Meneliti gerakan tangan/badan saat kerja.'],
+ ['時間研究','じかんけんきゅう','studi waktu','Ukur waktu kerja pakai stopwatch → dasar 標準時間.'],
+ ['標準時間','ひょうじゅんじかん','waktu standar','標 = tanda + 準 = patokan. Sering keluar di soal!'],
+ ['余裕','よゆう','kelonggaran (allowance)','余 sisa + 裕 longgar → waktu tambahan untuk istirahat/gangguan, ditambahkan ke waktu normal.'],
+ ['連合作業分析','れんごうさぎょうぶんせき','analisis kerja gabungan','連 sambung + 合 gabung → orang+mesin atau orang+orang bekerja bersamaan; cari waktu menunggu.'],
+ ['治工具','じこうぐ','jig & alat bantu','治 = mengatur + 工具 = alat. Alat supaya posisi buhin selalu sama (seperti jig di line-mu).'],
+ ['ムダ','むだ','pemborosan','Ingat 7 ムダ: produksi berlebih, menunggu, angkut, proses, stok, gerakan, cacat.'],
+ ['整理','せいり','seiri: pisahkan & buang yang tidak perlu','理 = logika → pilah dengan logika: perlu / tidak perlu.'],
+ ['整頓','せいとん','seiton: tata supaya mudah diambil','頓 = segera → barang bisa <b>segera</b> diambil.'],
+ ['清掃','せいそう','seisō: membersihkan','掃 = menyapu (ada 手 tangan + 帚 sapu).'],
+ ['清潔','せいけつ','seiketsu: menjaga kondisi 3S tetap bersih','潔 = murni. Tetap bersih terus, bukan sekali bersih.'],
+ ['躾','しつけ','shitsuke: disiplin / kebiasaan','身 badan + 美 indah → sikap tubuh yang indah = disiplin.'],
+],
+S2:[
+ ['受注生産','じゅちゅうせいさん','produksi berdasarkan pesanan','受 terima + 注 pesanan → buat setelah <b>terima</b> pesanan.'],
+ ['見込生産','みこみせいさん','produksi berdasarkan perkiraan (stok)','見込 = perkiraan → buat dulu, simpan di gudang.'],
+ ['多品種少量生産','たひんしゅしょうりょうせいさん','banyak jenis, volume kecil','多 banyak 品種 jenis · 少 sedikit 量 jumlah.'],
+ ['少品種多量生産','しょうひんしゅたりょうせいさん','sedikit jenis, volume besar','Kebalikan yang atas — line massal (seperti line machining).'],
+ ['個別生産','こべつせいさん','produksi satuan (job shop)','個 satu-satu + 別 terpisah.'],
+ ['ロット生産','ロットせいさん','produksi per lot','Lot = kelompok barang sejenis yang dibuat bersamaan.'],
+ ['連続生産','れんぞくせいさん','produksi kontinu / mengalir','連 sambung + 続 terus.'],
+ ['工数','こうすう','man-hour (jumlah jam kerja)','工 kerja + 数 jumlah. 2 orang × 3 jam = 6 人時.'],
+ ['差立','さしたて','dispatching: menentukan urutan kerja ke mesin/orang','差 menyodorkan + 立 menegakkan → menyerahkan pekerjaan berikutnya.'],
+ ['進捗','しんちょく','progres','進 maju + 捗 lancar → pekerjaan maju lancar?'],
+ ['現品管理','げんぴんかんり','kontrol barang fisik (lokasi & jumlah)','現 nyata + 品 barang → barang yang <b>benar-benar ada</b>.'],
+ ['余力管理','よりょくかんり','kontrol kapasitas sisa','余 sisa + 力 tenaga → masih ada tenaga/kapasitas berapa?'],
+ ['手配','てはい','pengaturan / persiapan','手 tangan + 配 bagi → membagi tugas dengan tangan.'],
+ ['ガントチャート','ガントチャート','gantt chart (jadwal batang)','Batang horizontal = durasi tiap pekerjaan.'],
+],
+S3:[
+ ['設備','せつび','fasilitas / mesin','設 pasang + 備 siapkan.'],
+ ['保全','ほぜん','pemeliharaan (maintenance)','保 jaga + 全 utuh → menjaga agar tetap utuh.'],
+ ['事後保全','じごほぜん','breakdown maintenance (perbaiki setelah rusak)','事後 = setelah kejadian.'],
+ ['予防保全','よぼうほぜん','preventive maintenance','予 sebelumnya + 防 cegah → cegah sebelum rusak.'],
+ ['改良保全','かいりょうほぜん','corrective maintenance (perbaiki desain agar tidak rusak lagi)','改良 = memperbaiki jadi lebih baik.'],
+ ['保全予防','ほぜんよぼう','maintenance prevention (desain mesin yang tidak perlu banyak perawatan)','Awas! Urutannya kebalikan 予防保全. Kata terakhir = jenisnya: …予防 = pencegahan di tahap desain.'],
+ ['生産保全','せいさんほぜん','productive maintenance (PM)','Gabungan semua jenis 保全 supaya produksi paling ekonomis.'],
+ ['劣化','れっか','degradasi / penurunan kondisi','劣 lebih buruk + 化 berubah → berubah jadi buruk.'],
+ ['故障','こしょう','kerusakan / breakdown','故 sebab + 障 halangan.'],
+ ['初期故障','しょきこしょう','kerusakan awal (masa awal pakai)','初期 = masa awal. Bagian kiri kurva bathtub.'],
+ ['偶発故障','ぐうはつこしょう','kerusakan acak','偶 kebetulan + 発 terjadi. Bagian tengah (datar) kurva bathtub.'],
+ ['摩耗故障','まもうこしょう','kerusakan karena aus','摩 gosok + 耗 habis. Bagian kanan kurva bathtub (naik lagi).'],
+ ['設備総合効率','せつびそうごうこうりつ','OEE','= 時間稼働率 × 性能稼働率 × 良品率.'],
+ ['自主保全','じしゅほぜん','autonomous maintenance (oleh operator sendiri)','自主 = atas kemauan sendiri. Operator bersihkan, cek, kencangkan baut.'],
+ ['点検','てんけん','pengecekan','点 titik + 検 periksa → cek titik demi titik.'],
+],
+S4:[
+ ['資材','しざい','material / bahan','資 modal + 材 bahan.'],
+ ['在庫','ざいこ','stok','在 ada + 庫 gudang → "ada di gudang".'],
+ ['発注','はっちゅう','memesan (ke pemasok)','発 kirim + 注 pesanan. Lawan: 受注 = menerima pesanan.'],
+ ['発注点','はっちゅうてん','reorder point','点 = titik → saat stok turun ke titik ini, pesan lagi.'],
+ ['定量発注方式','ていりょうはっちゅうほうしき','sistem pesan jumlah tetap','量 = <b>jumlah</b> tetap, waktunya berubah.'],
+ ['定期発注方式','ていきはっちゅうほうしき','sistem pesan periode tetap','期 = <b>periode</b> tetap, jumlahnya berubah. Bandingkan 量 vs 期!'],
+ ['安全在庫','あんぜんざいこ','safety stock','Stok cadangan untuk jaga-jaga.'],
+ ['調達期間','ちょうたつきかん','lead time pengadaan','調達 = mengadakan/mendapatkan + 期間 = jangka waktu.'],
+ ['所要量','しょようりょう','jumlah kebutuhan','所要 = yang diperlukan.'],
+ ['部品表','ぶひんひょう','BOM (daftar komponen)','表 = tabel.'],
+ ['棚卸','たなおろし','stock opname','棚 rak + 卸 turunkan → turunkan barang dari rak untuk dihitung.'],
+ ['先入先出','さきいれさきだし','FIFO','先 duluan 入 masuk 先 duluan 出 keluar.'],
+ ['購買','こうばい','pembelian','購 beli + 買 beli (keduanya = membeli).'],
+ ['外注','がいちゅう','subkontrak / pesan ke luar','外 luar + 注 pesan.'],
+ ['経済的発注量','けいざいてきはっちゅうりょう','EOQ (jumlah pesan paling ekonomis)','Titik di mana biaya pesan + biaya simpan paling kecil.'],
+],
+S5:[
+ ['物流','ぶつりゅう','logistik','物 barang + 流 alir → aliran barang.'],
+ ['運搬','うんぱん','pengangkutan jarak pendek (dalam pabrik)','運 bawa + 搬 angkut. Dalam pabrik = 運搬.'],
+ ['輸送','ゆそう','transportasi jarak jauh (antar lokasi)','輸 kirim jauh. Luar pabrik = 輸送. Sering dibandingkan dengan 運搬!'],
+ ['荷役','にやく','bongkar muat (material handling)','荷 muatan + 役 tugas.'],
+ ['保管','ほかん','penyimpanan','保 jaga + 管 kelola.'],
+ ['倉庫','そうこ','gudang','倉 lumbung + 庫 gudang.'],
+ ['包装','ほうそう','pengemasan','包 bungkus + 装 pasang.'],
+ ['個装','こそう','kemasan satuan','個 satu → paling dalam.'],
+ ['内装','ないそう','kemasan dalam','内 dalam.'],
+ ['外装','がいそう','kemasan luar','外 luar → kardus pengiriman.'],
+ ['固定ロケーション','こていロケーション','lokasi rak tetap','Barang A selalu di rak yang sama.'],
+ ['フリーロケーション','フリーロケーション','lokasi rak bebas','Taruh di rak yang kosong, catat di sistem.'],
+ ['活性示数','かっせいしすう','indeks kemudahan dipindah (0–4)','活性 = aktif/siap gerak. 0 = di lantai berserakan, 4 = di konveyor.'],
+ ['調達物流','ちょうたつぶつりゅう','logistik pengadaan (pemasok → pabrik)','Urutan: 調達 → 生産 → 販売 → 回収.'],
+ ['回収物流','かいしゅうぶつりゅう','logistik pengembalian (reverse)','回収 = mengumpulkan kembali.'],
+],
+K1:[
+ ['品質','ひんしつ','kualitas','品 barang + 質 mutu.'],
+ ['品質特性','ひんしつとくせい','karakteristik kualitas','Contoh: diameter lubang, kekasaran permukaan buhin.'],
+ ['ばらつき','ばらつき','variasi / sebaran','Hasil yang tidak seragam. Musuh utama QC.'],
+ ['管理図','かんりず','control chart','図 = gambar. Ada batas atas (UCL) & bawah (LCL).'],
+ ['特性要因図','とくせいよういんず','diagram fishbone (sebab-akibat)','要因 = faktor penyebab. Tulang ikan: 4M (人・機械・材料・方法).'],
+ ['パレート図','パレートず','diagram pareto','Batang diurutkan dari terbesar + garis kumulatif.'],
+ ['散布図','さんぷず','scatter diagram','散 sebar + 布 bentang → titik bertebaran.'],
+ ['層別','そうべつ','stratifikasi','層 lapisan + 別 pisah → pisahkan data per mesin/shift/orang.'],
+ ['全数検査','ぜんすうけんさ','inspeksi 100%','全 semua + 数 jumlah.'],
+ ['抜取検査','ぬきとりけんさ','inspeksi sampling','抜 cabut + 取 ambil → ambil beberapa dari lot.'],
+ ['不良品','ふりょうひん','barang cacat / NG','不 tidak + 良 baik.'],
+ ['源流管理','げんりゅうかんり','kontrol di hulu','源 sumber + 流 aliran → cegah dari sumbernya (desain, material).'],
+ ['品質保証','ひんしつほしょう','quality assurance','保証 = jaminan.'],
+ ['製造物責任','せいぞうぶつせきにん','product liability (PL)','製造物 = barang produksi + 責任 = tanggung jawab.'],
+ ['是正処置','ぜせいしょち','tindakan korektif','是正 = membetulkan + 処置 = tindakan.'],
+ ['母集団','ぼしゅうだん','populasi (statistik)','母 ibu + 集団 kelompok → "induk" dari sampel.'],
+],
+K2:[
+ ['原価','げんか','biaya pokok (cost)','原 asal + 価 harga → harga asal.'],
+ ['製造原価','せいぞうげんか','biaya produksi','= 材料費 + 労務費 + 経費.'],
+ ['総原価','そうげんか','biaya total','= 製造原価 + 販売費 + 一般管理費.'],
+ ['材料費','ざいりょうひ','biaya bahan','費 = biaya.'],
+ ['労務費','ろうむひ','biaya tenaga kerja','労 kerja keras + 務 tugas.'],
+ ['経費','けいひ','biaya overhead (selain bahan & tenaga kerja)','Listrik, sewa, penyusutan mesin, dll.'],
+ ['直接費','ちょくせつひ','biaya langsung','Bisa langsung dihitung per produk.'],
+ ['間接費','かんせつひ','biaya tidak langsung','間 antara → dibagi ke banyak produk.'],
+ ['固定費','こていひ','biaya tetap','固定 = tetap → tidak berubah walau produksi naik.'],
+ ['変動費','へんどうひ','biaya variabel','変動 = berubah-ubah → naik kalau produksi naik.'],
+ ['操業度','そうぎょうど','tingkat operasi pabrik','操 kendali + 業 usaha + 度 tingkat.'],
+ ['損益分岐点','そんえきぶんきてん','titik impas (BEP)','損 rugi + 益 untung + 分岐 cabang → titik pisah rugi/untung.'],
+ ['標準原価','ひょうじゅんげんか','biaya standar','Biaya "seharusnya", dibandingkan dengan biaya aktual.'],
+ ['原価差異','げんかさい','selisih biaya','差異 = perbedaan (標準 vs 実際).'],
+ ['原価企画','げんかきかく','target costing','企画 = perencanaan → biaya ditentukan sejak tahap desain.'],
+ ['原価低減','げんかていげん','pengurangan biaya','低 rendah + 減 kurang.'],
+ ['歩留まり','ぶどまり','yield (rasio barang jadi dari bahan)','Bahan 100, jadi 95 → 歩留まり 95%.'],
+],
+K3:[
+ ['納期','のうき','tenggat pengiriman (due date)','納 serahkan + 期 waktu.'],
+ ['遅延','ちえん','keterlambatan','遅 lambat + 延 tunda.'],
+ ['遵守','じゅんしゅ','mematuhi','遵 ikuti + 守 jaga.'],
+ ['顧客','こきゃく','pelanggan','顧 perhatikan + 客 tamu.'],
+ ['仕掛品','しかかりひん','barang setengah jadi (WIP)','仕掛 = sedang dikerjakan.'],
+ ['段取り','だんどり','setup / persiapan ganti produk','段取り替え = changeover (ganti jig, program CNC).'],
+ ['流動数曲線','りゅうどうすうきょくせん','kurva aliran (input–output kumulatif)','流動数 = jumlah yang mengalir. Jarak dua garis = WIP & waktu tunggu.'],
+ ['目で見る管理','めでみるかんり','manajemen visual','目 mata + 見る melihat → masalah langsung terlihat mata.'],
+ ['アンドン','アンドン','lampu andon (tanda kondisi line)','Lampu merah/kuning/hijau di line.'],
+ ['前工程','まえこうてい','proses sebelumnya','前 depan.'],
+ ['後工程','あとこうてい','proses berikutnya','後 belakang. "後工程はお客様" = proses berikut adalah pelanggan.'],
+],
+K4:[
+ ['労働安全衛生法','ろうどうあんぜんえいせいほう','UU Keselamatan & Kesehatan Kerja','Disingkat 安衛法 (あんえいほう). 衛生 = 衛 jaga + 生 hidup.'],
+ ['事業者','じぎょうしゃ','pemberi kerja / perusahaan','Pihak yang wajib menjamin keselamatan.'],
+ ['総括安全衛生管理者','そうかつあんぜんえいせいかんりしゃ','manajer K3 umum (penanggung jawab utama)','総括 = mengatur keseluruhan.'],
+ ['産業医','さんぎょうい','dokter perusahaan','Wajib di tempat kerja ≥ 50 orang.'],
+ ['安全衛生委員会','あんぜんえいせいいいんかい','komite K3','委員会 = komite.'],
+ ['労働災害','ろうどうさいがい','kecelakaan kerja','Disingkat 労災 (ろうさい).'],
+ ['度数率','どすうりつ','frequency rate','Jumlah korban per <b>1.000.000</b> jam kerja. 度数 = jumlah kali.'],
+ ['強度率','きょうどりつ','severity rate','Hari kerja hilang per <b>1.000</b> jam kerja. 強度 = tingkat berat.'],
+ ['保護具','ほごぐ','alat pelindung diri (APD)','保護 lindungi + 具 alat.'],
+ ['ヒヤリハット','ヒヤリハット','nyaris celaka (near miss)','ヒヤリ = kaget, ハット = tersentak.'],
+ ['危険予知','きけんよち','prediksi bahaya (KY)','危険 bahaya + 予知 tahu sebelumnya.'],
+ ['職業性疾病','しょくぎょうせいしっぺい','penyakit akibat kerja','疾病 = penyakit.'],
+ ['作業環境測定','さぎょうかんきょうそくてい','pengukuran lingkungan kerja','測定 = mengukur (debu, bising, zat kimia).'],
+ ['健康診断','けんこうしんだん','pemeriksaan kesehatan','診断 = diagnosis.'],
+],
+K5:[
+ ['公害','こうがい','polusi / pencemaran','公 umum + 害 bahaya → bahaya untuk umum.'],
+ ['典型7公害','てんけいななこうがい','7 jenis polusi khas','大気・水質・土壌・騒音・振動・地盤沈下・悪臭. Hafal ketujuhnya!'],
+ ['大気汚染','たいきおせん','polusi udara','大気 udara + 汚 kotor + 染 noda.'],
+ ['水質汚濁','すいしつおだく','pencemaran air','濁 = keruh (ada 氵 air).'],
+ ['土壌汚染','どじょうおせん','pencemaran tanah','壌 = tanah (ada 土).'],
+ ['騒音','そうおん','kebisingan','騒 ribut + 音 suara.'],
+ ['振動','しんどう','getaran','振 goyang + 動 gerak.'],
+ ['地盤沈下','じばんちんか','penurunan tanah','沈 tenggelam + 下 bawah.'],
+ ['悪臭','あくしゅう','bau busuk','悪 buruk + 臭 bau.'],
+ ['四大公害病','よんだいこうがいびょう','4 penyakit polusi besar Jepang','水俣病・新潟水俣病・イタイイタイ病・四日市ぜんそく.'],
+ ['環境基本法','かんきょうきほんほう','UU Dasar Lingkungan (1993)','Menggantikan 公害対策基本法.'],
+ ['産業廃棄物','さんぎょうはいきぶつ','limbah industri','廃棄 = membuang. Contoh: 切り粉 & oli bekas dari line-mu.'],
+ ['循環型社会','じゅんかんがたしゃかい','masyarakat berbasis daur ulang','循環 = berputar. Kunci: 3R (reduce, reuse, recycle).'],
+ ['持続可能','じぞくかのう','berkelanjutan','持続 bertahan + 可能 mungkin → SDGs.'],
+],
+// ---- KANJI WAJIB (satu huruf) : [kanji, bacaan utama, arti, bacaan lain + contoh + cara ingat]
+KJ5:[
+ ['適','てき','cocok / sesuai','Contoh: <b>適切</b>(てきせつ) = tepat. Muncul di hampir SEMUA soal: 最も適切なもの = yang paling tepat.'],
+ ['切','せつ','potong; dalam 適切 = tepat','Kun: き(る). 適切 = "dipotong pas" → tepat.'],
+ ['不','ふ','tidak / bukan','<b>不適切</b>(ふてきせつ) = TIDAK tepat. Huruf paling berbahaya di soal: kalau ada 不, cari jawaban yang SALAH.'],
+ ['正','せい','benar','Kun: ただ(しい). 正しいもの = yang benar.'],
+ ['誤','ご','salah / keliru','Kun: あやま(る). 誤っているもの = yang salah. Ada 言 (kata) → kata yang keliru.'],
+ ['最','さい','paling','Kun: もっと(も). 最も = paling. 最適 = paling cocok.'],
+ ['次','じ','berikut / selanjutnya','Kun: つぎ. 次の記述 = pernyataan berikut.'],
+ ['記','き','catat','記述(きじゅつ) = pernyataan; 記録(きろく) = catatan.'],
+ ['述','じゅつ','menyatakan','記述 = isi pernyataan pilihan A–D.'],
+ ['組','く','set / kelompok','組み合わせ(くみあわせ) = kombinasi → soal "pilih kombinasi yang benar".'],
+ ['選','せん','pilih','Kun: えら(ぶ). 選びなさい = pilihlah.'],
+ ['該','がい','yang bersangkutan','該当(がいとう)する = yang sesuai / termasuk.'],
+ ['当','とう','kena / tepat','Kun: あ(たる). 該当 · 適当(てきとう) = cocok.'],
+ ['関','かん','berkaitan','Kun: せき. 〜に関する = tentang …'],
+ ['説','せつ','menjelaskan','説明(せつめい) = penjelasan. 〜の説明として = sebagai penjelasan tentang …'],
+],
+KJ1:[
+ ['管','かん','pipa / mengelola','Ada 竹 (bambu) di atas → pipa bambu yang mengatur aliran. 管理(かんり) · 保管(ほかん).'],
+ ['理','り','logika / mengatur','管理 · 整理(せいり) · 処理(しょり) · 修理(しゅうり).'],
+ ['計','けい','hitung / ukur','Ada 言 + 十 → menghitung sambil bicara. 計画(けいかく) · 計算 · 設計(せっけい).'],
+ ['画','かく','rencana / gambar','計画 · 企画(きかく). Bacaan lain: が (映画).'],
+ ['分','ぶん','bagi','Kun: わ(ける). 分析(ぶんせき) · 分類(ぶんるい). Pisau 刀 membagi 八.'],
+ ['析','せき','urai','木 + 斤 (kapak) → kayu dibelah. Hanya di 分析 dan 解析.'],
+ ['改','かい','ubah','Kun: あらた(める). 改善(かいぜん) · 改良(かいりょう).'],
+ ['善','ぜん','baik','改善 = ubah jadi baik → KAIZEN.'],
+ ['活','かつ','hidup / aktif','活動(かつどう) · 活用(かつよう) · 活性.'],
+ ['動','どう','gerak','Kun: うご(く). 動作(どうさ) · 変動(へんどう) · 振動. 重 (berat) + 力 = memindahkan yang berat.'],
+ ['働','どう','bekerja (orang/mesin)','Kun: はたら(く). 稼働(かどう) · 労働(ろうどう). 人 + 動 = orang yang bergerak = bekerja.'],
+ ['業','ぎょう','pekerjaan / usaha','作業(さぎょう) · 業務 · 事業 · 操業度.'],
+ ['務','む','tugas','業務(ぎょうむ) · 労務費(ろうむひ).'],
+ ['制','せい','sistem / kendali','統制(とうせい) · 体制(たいせい).'],
+ ['統','とう','satukan','統制 · 統計(とうけい).'],
+ ['標','ひょう','tanda / target','標準(ひょうじゅん) · 目標(もくひょう).'],
+ ['準','じゅん','patokan','標準 = standar. 水準 = level.'],
+ ['基','き','dasar','基礎(きそ) · 基本(きほん) · 基準.'],
+ ['法','ほう','cara / hukum','方法 · 手法(しゅほう) · 安衛法. 氵 air mengalir sesuai aturan.'],
+ ['則','そく','aturan','原則(げんそく) · 規則.'],
+],
+KJ2:[
+ ['生','せい','hidup / lahir','Kun: い(きる)・う(む). 生産(せいさん) = melahirkan barang.'],
+ ['産','さん','menghasilkan','生産 · 資産(しさん) · 産業.'],
+ ['製','せい','membuat (pabrik)','Ada 衣 (kain) di bawah → membuat pakaian. 製品 · 製造 · 製作.'],
+ ['造','ぞう','membuat / membangun','Kun: つく(る). 製造(せいぞう) · 構造(こうぞう).'],
+ ['工','こう','kerja / teknik','工程(こうてい) · 工場(こうじょう) · 工数 · 治工具. Bentuk = penggaris tukang.'],
+ ['程','てい','tahap / tingkat','工程 · 日程(にってい).'],
+ ['作','さ','membuat','Kun: つく(る). 作業(さぎょう) · 動作(どうさ). Bacaan lain: さく (製作).'],
+ ['設','せつ','pasang / dirikan','Kun: もう(ける). 設備(せつび) · 設計(せっけい).'],
+ ['備','び','siapkan','Kun: そな(える). 設備 · 整備(せいび) · 具備.'],
+ ['保','ほ','jaga / pelihara','Kun: たも(つ). 保全 · 保管 · 保証 · 保護具.'],
+ ['全','ぜん','utuh / semua','Kun: まった(く). 安全 · 保全 · 全数検査.'],
+ ['機','き','mesin / fungsi','機械(きかい) · 機能(きのう).'],
+ ['械','かい','alat mekanik','Hampir selalu dalam 機械. 木 + 戒.'],
+ ['能','のう','kemampuan','機能 · 可能(かのう) · 性能(せいのう).'],
+ ['整','せい','rapikan','Kun: ととの(える). 整理 · 整頓 · 整備.'],
+ ['故','こ','sebab / rusak','故障(こしょう) = kerusakan mesin.'],
+ ['障','しょう','halangan','故障 · 障害.'],
+ ['劣','れつ','lebih buruk','少 + 力 = tenaga berkurang → 劣化(れっか).'],
+],
+KJ3:[
+ ['資','し','modal / sumber daya','資材(しざい) · 資産(しさん). Ada 貝 (kerang = uang).'],
+ ['材','ざい','bahan','木 → bahan kayu. 材料(ざいりょう) · 資材.'],
+ ['料','りょう','bahan / tarif','材料 · 料金. 米 + 斗 (takaran beras).'],
+ ['在','ざい','ada','在庫(ざいこ) = ada di gudang.'],
+ ['庫','こ','gudang','广 atap + 車 (kereta) = garasi/gudang. 在庫 · 倉庫(そうこ).'],
+ ['品','ひん','barang','Kun: しな. 3 kotak = banyak barang. 製品 · 部品 · 品質 · 不良品.'],
+ ['発','はつ','kirim / mulai / muncul','発注(はっちゅう) · 発生(はっせい) · 開発(かいはつ).'],
+ ['注','ちゅう','pesan / tuang','発注 · 受注(じゅちゅう) · 外注.'],
+ ['購','こう','membeli','購買(こうばい) · 購入(こうにゅう). Ada 貝 (uang).'],
+ ['運','うん','membawa','Kun: はこ(ぶ). 運搬(うんぱん) · 運送.'],
+ ['搬','はん','mengangkut','扌 tangan + 般. 運搬 (bacaan jadi ぱん).'],
+ ['物','ぶつ','barang','Kun: もの. 物流(ぶつりゅう) · 製造物.'],
+ ['流','りゅう','alir','Kun: なが(れる). 物流 · 源流 · 流動.'],
+ ['原','げん','asal / sumber','原価(げんか) · 原因(げんいん) · 原則 · 原材料.'],
+ ['価','か','harga / nilai','原価 · 評価(ひょうか) · 価格.'],
+ ['費','ひ','biaya','Ada 貝 (uang). 費用 · 材料費 · 労務費 · 経費.'],
+ ['固','こ','keras / tetap','固定費(こていひ) = biaya tetap.'],
+ ['変','へん','berubah','Kun: か(わる). 変動費(へんどうひ) = biaya variabel.'],
+ ['率','りつ','rasio / persen','効率 · 稼働率 · 不良率 · 度数率. Bacaan lain: そつ (引率).'],
+ ['量','りょう','jumlah','生産量 · 所要量 · 発注量 · 定量.'],
+ ['期','き','periode','納期 · 定期 · 期間. 月 (bulan) → waktu.'],
+ ['納','のう','menyerahkan','納期(のうき) · 納品. 糸 + 内 → menyerahkan ke dalam.'],
+ ['遅','ち','lambat','Kun: おそ(い). 遅延(ちえん) = terlambat.'],
+ ['減','げん','berkurang','Kun: へ(る). 低減(ていげん) · 削減.'],
+],
+KJ4:[
+ ['質','しつ','mutu / sifat','品質(ひんしつ) · 水質(すいしつ).'],
+ ['検','けん','periksa','検査(けんさ) · 点検(てんけん) · 検定.'],
+ ['査','さ','selidiki','検査 · 調査.'],
+ ['証','しょう','bukti / jamin','保証(ほしょう) · 証明書.'],
+ ['責','せき','tanggung jawab','責任(せきにん) · 製造物責任 (PL).'],
+ ['予','よ','sebelumnya','予防(よぼう) · 予知 · 予定.'],
+ ['防','ぼう','cegah','Kun: ふせ(ぐ). 予防 · 防止(ぼうし). 阝 tembok penahan.'],
+ ['災','さい','bencana','巛 (banjir) + 火 (api) = bencana. 災害(さいがい) · 労災.'],
+ ['害','がい','bahaya / kerugian','災害 · 公害(こうがい) · 障害.'],
+ ['衛','えい','jaga / lindungi','衛生(えいせい) = higiene/kesehatan.'],
+ ['危','き','bahaya','Kun: あぶ(ない). 危険(きけん) · 危険予知.'],
+ ['険','けん','curam / berisiko','危険 · 保険.'],
+ ['環','かん','lingkaran','環境(かんきょう) · 循環(じゅんかん).'],
+ ['境','きょう','batas / sekitar','環境 = lingkungan.'],
+ ['汚','お','kotor','Kun: よご(れる)・きたな(い). 汚染(おせん) · 汚濁(おだく). 氵 air kotor.'],
+ ['染','せん','noda / celup','Kun: そ(める). 汚染 · 感染.'],
+]};
+const KJLABEL={KJ5:'漢字 wajib · pola soal',KJ1:'漢字 wajib · manajemen & rencana',KJ2:'漢字 wajib · produksi & mesin',KJ3:'漢字 wajib · material, stok & biaya',KJ4:'漢字 wajib · kualitas, K3 & lingkungan'};
+
+// Weekly plan. keys: "S1-3" (whole section), "S1-3-2" (one item), "S1-chk" (理解度チェック)
+const WEEKS=[
+ {s:'2026-10-12',t:'作業管理: sistem produksi & analisis proses',pg:'専門 hlm 1–33',k:['S1-1','S1-2','S1-3-1'],x:['Daftar ujian 後期 minggu ini (batas 4 Des)']},
+ {s:'2026-10-19',t:'作業管理: studi gerakan, waktu, utilisasi',pg:'専門 hlm 34–64',k:['S1-3-2','S1-3-3','S1-3-4','S1-3-5']},
+ {s:'2026-10-26',t:'作業管理: perbaikan kerja & 5S',pg:'専門 hlm 65–90',k:['S1-4','S1-5','S1-chk']},
+ {s:'2026-11-02',t:'工程管理: konsep, bentuk produksi, jadwal',pg:'専門 hlm 91–120',k:['S2-1','S2-2','S2-3']},
+ {s:'2026-11-09',t:'工程管理: pengendalian produksi · 設備管理 mulai',pg:'専門 hlm 121–145',k:['S2-4','S2-chk','S3-1']},
+ {s:'2026-11-16',t:'設備管理: pemeliharaan, kerusakan, sistem',pg:'専門 hlm 146–178',k:['S3-2','S3-3','S3-4','S3-chk']},
+ {s:'2026-11-23',t:'資材・在庫: material & stok',pg:'専門 hlm 179–207',k:['S4-1','S4-2','S4-3']},
+ {s:'2026-11-30',t:'資材・在庫: gudang, stock opname, pembelian',pg:'専門 hlm 208–228',k:['S4-4','S4-5','S4-6','S4-chk'],x:['4 Des: batas akhir pendaftaran ujian']},
+ {s:'2026-12-07',t:'物流: konsep logistik & penyimpanan',pg:'専門 hlm 229–266',k:['S5-1','S5-2']},
+ {s:'2026-12-14',t:'物流: bongkar muat, angkut, kemas',pg:'専門 hlm 267–284',k:['S5-3','S5-4','S5-5','S5-chk'],x:['Minggu 20 Des: mini mock 専門 (20 soal, 55 menit)']},
+ {s:'2026-12-21',t:'品質管理: konsep, data, inspeksi, perbaikan',pg:'共通 hlm 1–45',k:['K1-1','K1-2','K1-3','K1-4']},
+ {s:'2026-12-28',t:'品質管理: jaminan & ISO · 原価管理 mulai',pg:'共通 hlm 46–80',k:['K1-5','K1-6','K1-chk','K2-1'],x:['Libur tahun baru: pakai waktu ekstra']},
+ {s:'2027-01-04',t:'原価管理: komponen & perhitungan biaya',pg:'共通 hlm 81–108',k:['K2-2','K2-3']},
+ {s:'2027-01-11',t:'原価管理: target costing & pengurangan biaya',pg:'共通 hlm 109–138',k:['K2-4','K2-5','K2-chk'],x:['Minggu 17 Jan: mini mock campuran (20 soal)']},
+ {s:'2027-01-18',t:'納期管理: tenggat & manajemen visual',pg:'共通 hlm 139–172',k:['K3-1','K3-2','K3-3','K3-4','K3-chk']},
+ {s:'2027-01-25',t:'安全衛生 + 環境管理',pg:'共通 hlm 173–220',k:['K4-1','K4-2','K4-3','K4-4','K4-5','K4-chk','K5-1','K5-2','K5-3','K5-4','K5-chk']},
+ {s:'2027-02-01',t:'Simulasi ujian #1 & #2 · ulang bab lemah',pg:'過去問 penuh',k:[],x:['Sen/Sel: 過去問 #1 (40 soal, 110 menit)','Rab–Jum: bahas salah + baca ulang bab terkait','Sab/Min: 過去問 #2','Kartu kosakata: mode "belum hafal" setiap hari']},
+ {s:'2027-02-08',t:'Simulasi #3 · ulang kosakata · UJIAN',pg:'Minggu final',k:[],x:['Sen/Sel: 過去問 #3','Rab–Jum: hanya ulang kartu kosakata','Sab 13 Feb: istirahat, siapkan 受験票','Min 14 Feb: UJIAN 後期']}
+];
+
+// ---------- BUILD INDEX ----------
+const ITEMS={}, SECS={}, ORDER=[], CH={};
+BOOKS.forEach(b=>b.ch.forEach((c,ci)=>{
+  const cid=b.code+(ci+1); c.id=cid; c.no=ci+1; c.book=b.code; CH[cid]=c;
+  c.secs.forEach((s,si)=>{
+    const sid=cid+'-'+(si+1); SECS[sid]=[];
+    s[4].forEach((it,ii)=>{const id=sid+'-'+(ii+1);ITEMS[id]=it;SECS[sid].push(id);ORDER.push(id)});
+  });
+  const k=cid+'-chk'; ITEMS[k]=['理解度チェック','','Cek pemahaman akhir bab',c.chk]; ORDER.push(k);
+}));
+function expand(keys){const out=[];keys.forEach(k=>{if(SECS[k])out.push(...SECS[k]);else if(ITEMS[k])out.push(k)});return out}
+WEEKS.forEach(w=>{w.ids=expand(w.k);w.chs=[...new Set(w.ids.map(i=>i.split('-')[0]))]});
+const VLIST=[]; Object.keys(VOCAB).forEach(c=>VOCAB[c].forEach(v=>VLIST.push({key:c+':'+v[0],ch:c,w:v[0],y:v[1],a:v[2],m:v[3]})));
+const chLabel=c=>KJLABEL[c]||((CH[c].book==='S'?'専門':'共通')+' 第'+CH[c].no+'章 '+CH[c].jp);
+const TABS=['roadmap','materi','kosakata','latihan','tips','cara'];
+
+// ---------- STATE ----------
+let state={done:{},logs:[],vocab:{},hari:{},days:{}};
+
+const LS='bc3-roadmap-v1';
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsPut(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+try{const s=JSON.parse(lsGet(LS)||'null'); if(s) state={done:s.done||{},logs:s.logs||[],vocab:s.vocab||{},hari:s.hari||{},days:s.days||{}}}catch(e){}
+function persist(){
+  state.days=state.days||{}; state.days[dk(today())]=true;
+  lsPut(LS,JSON.stringify(state));
+  note('Tersimpan di browser ini ✓');
+}
+function note(t){document.getElementById('saveNote').textContent=t}
+
+// ---------- HELPERS ----------
+const $=s=>document.querySelector(s);
+const EXAM=new Date('2027-02-14T09:00:00+09:00');
+function today(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function pd(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+const fmt=d=>d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+function curWeek(){const t=today();let idx=-1;WEEKS.forEach((w,i)=>{if(t>=pd(w.s))idx=i});return idx}
+const dk=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+function streak(){const D=state.days||{};const d=today();if(!D[dk(d)])d.setDate(d.getDate()-1);let n=0;while(D[dk(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function cnt(ids){return ids.filter(i=>state.done[i]).length}
+const vOk=c=>VLIST.filter(v=>(!c||v.ch===c)&&state.vocab[v.key]==='ok').length;
+const vTot=c=>VLIST.filter(v=>!c||v.ch===c).length;
+
+// ---------- RENDER ----------
+function renderStats(){
+  $('#eyebrow').innerHTML=R('ビジネス・キャリア検定 3級 · 生産管理オペレーション');
+  const days=Math.max(0,Math.ceil((EXAM-today())/864e5));
+  $('#sDays').textContent=days;
+  const d=cnt(ORDER), pct=Math.round(d/ORDER.length*100);
+  $('#sPct').textContent=pct+'%'; $('#sPctN').textContent=d+'/'+ORDER.length; $('#rPct').style.setProperty('--p',pct);
+  const vo=vOk(), vp=Math.round(vo/VLIST.length*100);
+  $('#sVocP').textContent=vp+'%'; $('#sVoc').textContent=vo+'/'+VLIST.length; $('#rVoc').style.setProperty('--p',vp);
+  $('#sStreak').textContent=streak();
+  { const cw=curWeek(); let st='standby', t='<b>Standby</b><small>Shift pertama mulai Senin, 12 Okt</small>';
+    if(cw>=0){ let exp=0; WEEKS.forEach((w,i)=>{if(i<cw)exp+=w.ids.length});
+      const wd=Math.min(7,Math.floor((today()-pd(WEEKS[cw].s))/864e5)+1); exp+=Math.round(WEEKS[cw].ids.length*wd/7);
+      const behind=exp-d;
+      if(behind<=2){st='ok';t='<b>Normal</b><small>Produksi sesuai jadwal. Pertahankan!</small>'}
+      else if(behind<=8){st='warn';t='<b>Caution</b><small>Tertinggal '+behind+' subbab dari target hari ini</small>'}
+      else {st='bad';t='<b>Delay</b><small>Tertinggal '+behind+' subbab, kejar pelan-pelan tiap hari</small>'} }
+    $('#andon').dataset.s=st; const a=$('#andonTxt'); a.dataset.s=st; a.innerHTML=t; }
+  const w=curWeek(); $('#sWeek').textContent=w<0?'0':(w+1);
+  $('#regAlert').hidden = today()>pd('2026-12-04');
+}
+function secLabel(id){
+  const [c,s]=id.split('-'); const sec=CH[c].secs[+s-1];
+  return R(sec[0])+' <span class="note">'+esc(sec[2])+'</span>';
+}
+function renderRoadmap(){
+  const cw=curWeek();
+  const stCls=i=>{const w=WEEKS[i],n=w.ids.length,dn=cnt(w.ids);if(i===cw)return 'run';if(n&&dn===n)return 'done';if(i<cw)return n?'late':'done';return ''};
+  let lm=`<div class="card linemap"><div class="lm-head"><b>Line map</b><span class="note">WO-01 → WO-18 → ${R('試験')} 14 Feb · ketuk stasiun untuk lompat</span></div><div class="lm">`;
+  WEEKS.forEach((w,i)=>{lm+=`<button class="st ${stCls(i)}" data-goto="wk-${i}" title="WO-${String(i+1).padStart(2,'0')} · ${esc(w.t)}" aria-label="Work order ${i+1}">${String(i+1).padStart(2,'0')}</button>`});
+  lm+=`<button class="st goal" data-tab="tips" title="Hari ujian 14 Feb 2027" aria-label="Hari ujian">${R('試験')}</button></div><div class="lm-legend"><span><i class="l-done"></i>${R('完了')} selesai</span><span><i class="l-run"></i>${R('稼働中')} minggu ini</span><span><i class="l-late"></i>${R('遅延')} terlambat</span><span><i class="l-todo"></i>belum mulai</span></div></div>`;
+  let h=lm+`<p class="note">Sen–Jum ±1 jam (4–6 halaman/hari) · Sabtu 1–1,5 jam (ulang + ${R('理解度')}チェック) · Minggu 1 jam latihan soal · setiap hari 10 menit kartu kosakata.</p>`;
+  WEEKS.forEach((w,i)=>{
+    const st=pd(w.s), en=new Date(st); en.setDate(en.getDate()+6);
+    const n=w.ids.length, d=cnt(w.ids), pct=n?Math.round(d/n*100):0;
+    let pill='';
+    if(n&&d===n) pill='<span class="pill ok">'+R('完了')+' · selesai</span>';
+    else if(i===cw) pill='<span class="pill run">'+R('稼働中')+' · minggu ini</span>';
+    else if(i<cw&&n) pill='<span class="pill bad">'+R('遅延')+' · kurang '+(n-d)+'</span>';
+    const topics=[...new Set(w.ids.map(id=>id.endsWith('-chk')?R('理解度')+'チェック '+R(chLabel(id.split('-')[0])):secLabel(id)))];
+    const vb=w.chs.map(c=>`<button class="linkbtn" data-vocab="${c}">Kosakata ${R('第'+CH[c].no+'章')} · ${vOk(c)}/${vTot(c)}</button>`).join(' ');
+    h+=`<article class="week ${i===cw?'now':''} ${i<cw?'past':''}" id="wk-${i}">
+      <div class="whead"><span class="wnum">WO-${String(i+1).padStart(2,'0')}</span><span class="wdate">${fmt(st)} – ${fmt(en)}</span>${pill}</div>
+      <div class="whead"><h3 class="wtitle">${R(w.t)}</h3><span class="wdate">${R(w.pg)}</span></div>
+      <div class="wbody">${topics.length?'<ul>'+topics.map(t=>'<li>'+t+'</li>').join('')+'</ul>':''}${w.x?'<ul>'+w.x.map(t=>'<li><b>'+R(t)+'</b></li>').join('')+'</ul>':''}</div>
+      ${n?`<div class="wfoot"><div class="bar"><i style="width:${pct}%"></i></div><span>${d}/${n}</span>${vb}</div>`:''}
+    </article>`;
+  });
+  $('#p-roadmap').innerHTML=h;
+}
+function renderMateri(){
+  const open=[...document.querySelectorAll('details.ch[open]')].map(d=>d.dataset.ch);
+  let h=`<p class="note">Centang tiap subbab setelah kamu baca + terjemahkan + catat istilahnya. Baris merah muda = ${R('理解度')}チェック (soal latihan akhir bab). Matikan furigana di atas untuk menguji diri sendiri.</p>`;
+  BOOKS.forEach(b=>{
+    h+=`<div class="bookhead"><div class="eyebrow">${b.code==='S'?'Buku 1':'Buku 2'}</div><h2>${R(b.jp)}</h2><div class="note">${esc(b.tr)}</div></div>`;
+    b.ch.forEach(c=>{
+      const ids=ORDER.filter(i=>i.startsWith(c.id+'-')); const d=cnt(ids);
+      h+=`<details class="ch" data-ch="${c.id}" ${open.includes(c.id)?'open':''}><summary><div class="chname"><div class="jp">${R('第'+c.no+'章')} ${R(c.jp)}</div><div class="tr">${esc(c.tr)}</div></div><div class="chmeta">${d}/${ids.length}<br>hlm ${c.p}</div></summary><div class="chbody">`;
+      h+=`<div><button class="linkbtn" data-vocab="${c.id}">Hafalkan kosakata bab ini · ${vOk(c.id)}/${vTot(c.id)}</button></div>`;
+      c.secs.forEach((s,si)=>{
+        const sid=c.id+'-'+(si+1);
+        h+=`<div class="sec"><div class="sechead"><span class="n">${R('第'+(si+1)+'節')}</span><span class="jp">${R(s[0])}</span><span class="tr">${esc(s[2])}</span></div>`;
+        SECS[sid].forEach(id=>h+=itemRow(id));
+        h+=`</div>`;
+      });
+      h+=`<div class="sec">${itemRow(c.id+'-chk',true)}</div></div></details>`;
+    });
+  });
+  $('#p-materi').innerHTML=h;
+}
+function itemRow(id,chk){
+  const it=ITEMS[id], on=!!state.done[id];
+  return `<label class="item ${on?'done':''} ${chk?'chk':''}" for="c-${id}"><input type="checkbox" id="c-${id}" data-id="${id}" ${on?'checked':''}><span class="txt"><span class="jp">${R(it[0])}</span><span class="tr">${esc(it[2])}</span></span><span class="pg">p.${it[3]}</span></label>`;
+}
+
+// ---- kosakata ----
+let vFilter='', vOnly=false, vMode='card', vQueue=[], vIdx=0, vReveal=false;
+try{vFilter=lsGet(LS+'-vf')||''}catch(e){}
+function vPool(){return VLIST.filter(v=>(!vFilter||v.ch===vFilter)&&(!vOnly||state.vocab[v.key]!=='ok'))}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildQueue(){
+  const p=vPool(), rank=v=>state.vocab[v.key]==='again'?0:state.vocab[v.key]==='ok'?2:1;
+  vQueue=[0,1,2].flatMap(r=>shuffle(p.filter(v=>rank(v)===r))); vIdx=0; vReveal=false;
+}
+function renderVocab(){
+  const op=c=>`<option value="${c}" ${c===vFilter?'selected':''}>${esc(chLabel(c))} (${vOk(c)}/${vTot(c)})</option>`;
+  const opts=`<option value="">Semua (${VLIST.length} kata &amp; kanji)</option><optgroup label="Kanji wajib (satu huruf)">${Object.keys(KJLABEL).map(op).join('')}</optgroup><optgroup label="Kosakata per bab">${Object.keys(CH).map(op).join('')}</optgroup>`;
+  let h=`<div class="card"><div class="ctl">
+    <label for="vSel" style="flex:2 1 220px">Pilih bab<select id="vSel">${opts}</select></label>
+    <label class="chkl" for="vOnly"><input type="checkbox" id="vOnly" ${vOnly?'checked':''}> Hanya yang belum hafal</label>
+    <div class="seg" role="group" aria-label="Mode"><button data-vmode="card" aria-pressed="${vMode==='card'}">Kartu</button><button data-vmode="list" aria-pressed="${vMode==='list'}">Daftar</button></div>
+  </div>
+  <div class="bar"><i style="width:${Math.round(vOk(vFilter)/vTot(vFilter)*100)}%"></i></div>
+  <div class="note">${vOk(vFilter)} dari ${vTot(vFilter)} sudah hafal. Mulai dari <b>漢字 wajib · pola soal</b>: 15 kanji ini ada di hampir setiap soal ujian. Kosakata per bab dipilih dari topik bab; tambahkan sendiri kata tebal lain dari bukumu.</div></div>`;
+  if(vMode==='card'){
+    if(!vQueue.length||vIdx>=vQueue.length) buildQueue();
+    const v=vQueue[vIdx];
+    if(!v){h+=`<div class="fc"><div class="fc-front" style="font-size:22px">Semua kata di pilihan ini sudah hafal.</div><div class="note">Matikan "Hanya yang belum hafal" untuk mengulang semuanya.</div></div>`}
+    else{
+      const st=state.vocab[v.key];
+      h+=`<div class="fc ${v.ch.startsWith('KJ')?'kanji':''}"><div class="fc-meta"><span>${R(chLabel(v.ch))}</span><span class="mono">${vIdx+1}/${vQueue.length}${st?` · ${st==='ok'?'hafal':'ulang'}`:''}</span></div>
+        <div class="fc-front">${vReveal?RW(v.w,v.y):esc(v.w)}</div>
+        ${vReveal?`<div class="fc-back"><div class="yomi">${esc(v.y)}</div><div class="arti">${esc(v.a)}</div><div class="mn"><b>Cara ingat:</b> ${v.m}</div></div>
+        <div class="fc-actions"><button class="btn again" data-vans="again">Belum ingat</button><button class="btn good" data-vans="ok">Sudah hafal</button></div>`
+        :`<div class="note">Coba baca dulu dalam hati: bacaannya apa, artinya apa?</div><button class="btn" data-vreveal="1">Lihat jawaban</button>`}
+      </div>`;
+    }
+  } else {
+    const p=vPool();
+    h+=`<div class="tblwrap"><table><thead><tr><th>Kata</th><th>Arti &amp; cara ingat</th><th>Status</th></tr></thead><tbody>${p.map(v=>{const st=state.vocab[v.key];return `<tr class="vrow"><td class="w">${RW(v.w,v.y)}</td><td><div>${esc(v.a)}</div><div class="mnc">${v.m}</div></td><td><button class="pill vstat ${st==='ok'?'ok':st==='again'?'warn':''}" data-vtoggle="${esc(v.key)}">${st==='ok'?'hafal':st==='again'?'ulang':'baru'}</button></td></tr>`}).join('')||'<tr><td colspan="3" class="empty">Tidak ada kata di pilihan ini.</td></tr>'}</tbody></table></div><p class="note">Ketuk status untuk mengganti: baru → hafal → ulang.</p>`;
+  }
+  $('#p-kosakata').innerHTML=h;
+}
+
+function renderLatihan(){
+  const opts=['過去問 (simulasi penuh)','Mini mock','Latihan topik (Minggu)'].concat(Object.keys(CH).map(c=>'理解度チェック '+chLabel(c)));
+  const logs=[...state.logs].sort((a,b)=>b.d.localeCompare(a.d));
+  $('#p-latihan').innerHTML=`
+  <div class="card"><h3>Ritme latihan soal</h3>
+   <div class="tblwrap"><table><thead><tr><th>Kapan</th><th>Durasi</th><th>Latihan</th></tr></thead><tbody>
+    <tr><td>Setiap hari</td><td class="t">10 mnt</td><td>Tab <b>Kosakata</b> → mode Kartu, pilih bab yang sedang dibaca. Kata "belum ingat" otomatis muncul duluan besoknya.</td></tr>
+    <tr><td>Sabtu</td><td class="t">30–45 mnt</td><td>Kerjakan <b>${R('理解度')}チェック</b> bab yang selesai minggu itu tanpa buka buku, lalu koreksi &amp; catat skor di bawah.</td></tr>
+    <tr><td>Minggu</td><td class="t">45–60 mnt</td><td>10 soal ${R('過去問')} dari topik minggu itu. Tiap soal salah: terjemahkan soal + pilihan jawaban, tulis alasan jawaban benar.</td></tr>
+    <tr><td>20 Des</td><td class="t">55 mnt</td><td>Mini mock ${R('専門')} (20 soal campur bab 1–5).</td></tr>
+    <tr><td>17 Jan</td><td class="t">55 mnt</td><td>Mini mock campuran ${R('専門')} + ${R('品質')}/${R('原価')} (20 soal).</td></tr>
+    <tr><td>1–12 Feb</td><td class="t">110 mnt × 3</td><td>Simulasi penuh ${R('過去問')} dengan timer, kondisi seperti ujian asli. Target ≥ 70% supaya aman (batas lulus umumnya ±60%).</td></tr>
+   </tbody></table></div>
+   <p class="note">Sumber soal: ${R('過去問')} di situs JAVADA (${R('ビジネス・キャリア検定')} → ${R('試験問題')}) atau buku ${R('過去問題集')} ${R('生産管理')} 3${R('級')}. Format &amp; batas lulus resmi cek ulang di situs JAVADA.</p>
+  </div>
+  <div class="card"><h3>Catat skor</h3>
+   <form class="log" id="logForm">
+    <label for="lgD">Tanggal<input type="date" id="lgD" required></label>
+    <label for="lgT" style="flex:2 1 220px">Jenis<select id="lgT">${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select></label>
+    <label for="lgS" style="flex:0 1 90px">Benar<input type="number" id="lgS" min="0" required></label>
+    <label for="lgN" style="flex:0 1 90px">Dari<input type="number" id="lgN" min="1" value="40" required></label>
+    <button class="btn" type="submit">Simpan</button>
+   </form>
+   <div class="tblwrap">${logs.length?`<table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Skor</th><th></th></tr></thead><tbody>${logs.map(l=>{const p=Math.round(l.s/l.n*100);return `<tr><td class="t">${esc(l.d)}</td><td>${R(l.t)}</td><td><span class="pill ${p>=70?'ok':p>=60?'':'warn'}">${l.s}/${l.n} · ${p}%</span></td><td><button class="btn ghost" data-del="${esc(l.id)}" aria-label="Hapus">✕</button></td></tr>`}).join('')}</tbody></table>`:`<div class="empty">Belum ada skor. Setelah ${R('理解度')}チェック pertama (akhir Minggu 3, ±1 Nov), catat hasilnya di sini.</div>`}</div>
+  </div>`;
+  const dI=$('#lgD'); if(dI){const t=today();dI.value=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
+}
+function renderCara(){
+  $('#p-cara').innerHTML=`
+  <div class="card"><h3>Rutinitas 1 jam (Sen–Jum)</h3>
+   <div class="tblwrap"><table><thead><tr><th>Menit</th><th>Langkah</th></tr></thead><tbody>
+    <tr><td class="t">0–5</td><td><b>Ulang kosakata</b>: tab Kosakata → Kartu, centang "hanya yang belum hafal".</td></tr>
+    <tr><td class="t">5–10</td><td><b>Skim</b> subbab hari ini: judul, kata tebal, gambar &amp; tabel saja. Baca judulnya dengan furigana di tab Materi.</td></tr>
+    <tr><td class="t">10–40</td><td><b>Baca + terjemahkan per paragraf.</b> Arahkan Google Lens (Kamera → Terjemahkan) ke paragraf, pahami artinya, lalu tulis 1 kalimat ringkasan bahasa Indonesia di buku catatan.</td></tr>
+    <tr><td class="t">40–50</td><td><b>Catat istilah</b> tebal dengan format di bawah (maks. 8 istilah/hari). Cocokkan dengan kartu di tab Kosakata.</td></tr>
+    <tr><td class="t">50–60</td><td><b>Tutup buku, jelaskan ulang</b> dengan kata-katamu. Rekam 30 detik — bisa langsung jadi bahan konten harianmu. Lalu centang di tracker.</td></tr>
+   </tbody></table></div>
+  </div>
+  <div class="card"><h3>Format catatan istilah</h3>
+   <div class="ex">${R('漢字')} ｜ よみ ｜ arti ｜ cara ingat / contoh di pabrikku<br>${RW('稼働分析','かどうぶんせき')} ｜ かどうぶんせき ｜ analisis utilisasi ｜ berapa % waktu mesin CNC benar-benar memotong<br>${RW('抜取検査','ぬきとりけんさ')} ｜ ぬきとりけんさ ｜ inspeksi sampling ｜ cek lubang 5 ${R('部品')} dari 1 lot, bukan semua</div>
+   <p class="note">Kolom "cara ingat" paling penting: pecah kanji jadi arti per huruf (contoh: ${RW('在庫','ざいこ')} = ada + gudang), lalu kaitkan dengan line tempatmu kerja (${R('切り粉')}, cek lubang, 5S).</p>
+  </div>
+  <div class="card"><h3>Tips membaca teks ujian</h3>
+   <ol>
+    <li><b>Jangan terjemahkan semua kata.</b> Soal BC3 berbentuk pilihan ganda — yang dinilai pemahaman istilah, jadi fokus ke kata tebal &amp; tabel.</li>
+    <li><b>Kenali pola akhiran soal:</b> ${R('適切')}なもの (yang tepat), ${R('不適切')}なもの (yang TIDAK tepat), ${R('正しい')} (benar), ${R('誤っている')} (salah). Selalu garis bawahi — banyak orang salah di sini.</li>
+    <li><b>Kanji yang paling sering muncul</b>: ${R('管理')} (manajemen), ${R('計画')} (rencana), ${R('分析')} (analisis), ${R('改善')} (perbaikan), ${R('原価')} (biaya), ${R('在庫')} (stok), ${R('保全')} (pemeliharaan), ${R('検査')} (inspeksi), ${R('納期')} (tenggat kirim), ${R('工程')} (proses).</li>
+    <li><b>Aplikasi</b>: Google Lens untuk foto buku, DeepL untuk paragraf panjang, takoboto/Jisho untuk cek bacaan kanji.</li>
+    <li><b>Kalau tertinggal</b>: jangan mengejar dengan begadang. Lewati detail perhitungan dulu, kerjakan ${R('理解度')}チェック bab itu, lalu lanjut sesuai jadwal minggu berjalan.</li>
+   </ol>
+  </div>`;
+}
+const HARI=[
+ ['H-30','Cek 受験票 sudah datang (dikirim ±2 minggu sebelum ujian) dan alamat 試験会場.'],
+ ['H-30','Cek di 受験票 / situs JAVADA: 電卓 boleh dibawa atau tidak, dan aturan 本人確認.'],
+ ['H-14','Simulasi penuh 110 menit di pagi hari, jam yang sama dengan ujian.'],
+ ['H-7','Cek rute & waktu tempuh ke 試験会場 (Google Maps, jadwal kereta hari Minggu).'],
+ ['H-7','Berhenti belajar materi baru. Hanya ulang kartu "belum hafal" + rumus.'],
+ ['H-1','Siapkan: 受験票, kartu identitas 写真付き (在留カード), 鉛筆 HB 2–3 batang, 消しゴム, 時計 (bukan HP).'],
+ ['H-1','Tidur cukup — jangan begadang.'],
+ ['Hari H','Tiba 30 menit lebih awal. Baca sekilas halaman rumus & kanji pola soal sambil menunggu.'],
+ ['Hari H','Tulis nomor ujian & isi lembar jawaban dengan teliti; cek nomor soal = nomor kolom jawaban tiap 10 soal.'],
+];
+function renderTips(){
+  const F=(t,f,n)=>`<div><b>${R(t)}</b> = ${R(f)}${n?`<small>${n}</small>`:''}</div>`;
+  $('#p-tips').innerHTML=`
+  <div class="card"><h3><span class="no">01</span>Strategi besar</h3>
+   <ol>
+    <li><b>Target 70%, bukan 100%.</b> Batas lulus umumnya ±60% (cek resmi di JAVADA). Dengan target 70% kamu punya cadangan untuk soal yang tidak dimengerti bahasanya.</li>
+    <li><b>Hafal istilah, bukan kalimat.</b> Hampir semua soal menguji: "istilah X artinya apa / mana yang bukan contoh X". Kalau kenal istilahnya, setengah soal sudah terjawab.</li>
+    <li><b>Prioritas ${R('専門')} dulu.</b> Materi ${R('専門知識')} (${R('作業・工程・設備・在庫・物流')}) paling dekat dengan pekerjaanmu di line — paling cepat dipahami dan paling banyak poinnya.</li>
+    <li><b>Soal ujian asli umumnya tanpa furigana.</b> Mulai Januari, belajar dengan tombol Furigana OFF supaya terbiasa.</li>
+    <li><b>Ulang soal yang salah, bukan soal yang benar.</b> Simpan buku catatan khusus "soal yang pernah salah" dan baca ulang tiap Minggu.</li>
+    <li><b>Ajari orang lain.</b> Konten TikTok/IG harianmu adalah latihan terbaik: kalau bisa menjelaskan ${R('稼働率')} dalam 30 detik, kamu sudah paham.</li>
+   </ol>
+  </div>
+  <div class="card"><h3><span class="no">02</span>Teknik menjawab soal</h3>
+   <ol>
+    <li><b>Baca kalimat terakhir soal duluan.</b> Tentukan dulu: cari yang ${R('適切')} (tepat) atau ${R('不適切')}・${R('誤っている')} (salah)? Lingkari kata itu di kertas soal.</li>
+    <li><b>Soal ${R('不適切')}:</b> tiga pilihan benar, satu salah. Coret yang kamu yakin benar → sisanya jawabannya.</li>
+    <li><b>Soal ${R('組み合わせ')} (kombinasi):</b> cari SATU pernyataan yang pasti benar/salah, lalu buang semua pilihan kombinasi yang tidak cocok. Sering cukup tahu 2 dari 4 pernyataan.</li>
+    <li><b>Waspada kata mutlak.</b> Pilihan yang memakai kata di bawah ini sering (tidak selalu) salah, karena manajemen produksi jarang "mutlak":
+     <div class="trap" style="margin-top:6px">
+      <span class="k">${R('必ず')}</span><span>pasti / harus selalu</span>
+      <span class="k">${R('常に')}</span><span>selalu</span>
+      <span class="k">すべて</span><span>semua</span>
+      <span class="k">${R('絶対')}に</span><span>mutlak</span>
+      <span class="k">${R('一切')}〜ない</span><span>sama sekali tidak</span>
+      <span class="k">〜のみ / 〜だけ</span><span>hanya</span>
+     </div>
+     Sebaliknya ${R('一般')}に (umumnya), ${R('原則')}として (pada prinsipnya), 〜場合がある (ada kalanya) lebih sering benar.</li>
+    <li><b>Waspada pasangan kata kembar</b>: ${R('予防保全 ↔ 保全予防, 定量発注 ↔ 定期発注, 運搬 ↔ 輸送, 受注 ↔ 発注, 度数率 ↔ 強度率, 固定費 ↔ 変動費')}. Soal sering menukar definisinya.</li>
+    <li><b>Jangan kosongkan jawaban.</b> Jawaban kosong pasti 0 poin — kalau ragu, eliminasi lalu tebak.</li>
+   </ol>
+  </div>
+  <div class="card"><h3><span class="no">03</span>Soal ${R('適切')} vs ${R('不適切')}: cara mengerjakan</h3>
+   <div class="dir">
+    <div><span class="note">Soal berakhir dengan</span><span class="big2">${R('最も適切')}なもの</span><span>atau ${R('正しい')}もの → cari <b>1 yang BENAR</b>. Tulis besar <span class="mark o">○</span> di samping nomor soal.</span></div>
+    <div><span class="note">Soal berakhir dengan</span><span class="big2">${R('最も不適切')}なもの</span><span>atau ${R('誤っている')}もの → cari <b>1 yang SALAH</b>. Tulis besar <span class="mark x">×</span> di samping nomor soal.</span></div>
+   </div>
+   <ol>
+    <li><b>Nilai keempat pilihan</b> dengan ○ (benar), × (salah), △ (ragu). Jangan berhenti di pilihan pertama yang terasa cocok.</li>
+    <li>Soal ○ → jawabannya satu-satunya ○. Soal × → jawabannya satu-satunya ×. Pilihan △ diselesaikan dengan eliminasi.</li>
+    <li><b>Pilihan salah biasanya kalimat benar yang diubah 1–2 kata</b>: istilah ditukar dengan pasangannya, arah dibalik (${R('増')}える↔${R('減')}る, ${R('高')}い↔${R('低')}い), kata mutlak ditambahkan, atau angka diganti.</li>
+    <li><b>Baca sampai akhir kalimat.</b> Dalam bahasa Jepang, benar/salahnya kalimat ada di ujung:</li>
+   </ol>
+   <div class="tblwrap"><table><thead><tr><th>Akhiran</th><th>Arti</th></tr></thead><tbody>
+    <tr><td>〜である ／ 〜ではない</td><td>adalah ／ bukan</td></tr>
+    <tr><td>〜しなければならない</td><td>harus</td></tr>
+    <tr><td>〜してはならない</td><td>tidak boleh</td></tr>
+    <tr><td>〜${R('必要')}がある ／ 〜${R('必要')}はない</td><td>perlu ／ tidak perlu</td></tr>
+    <tr><td>〜が${R('望')}ましい</td><td>sebaiknya</td></tr>
+    <tr><td>〜とは${R('限')}らない</td><td>belum tentu</td></tr>
+   </tbody></table></div>
+   <div class="q">
+    <div class="note">Contoh latihan 1 · soal ×</div>
+    <div class="stem">${R('設備保全に関する記述として、最も不適切なものを選びなさい。')}</div>
+    <ol>
+     <li><span class="lab">ア</span>${R('予防保全は、故障が発生する前に点検や部品交換を行う保全である。')}</li>
+     <li><span class="lab">イ</span>${R('事後保全は、故障が発生してから修理を行う保全である。')}</li>
+     <li><span class="lab">ウ</span>${R('自主保全は、オペレーターが日常的に清掃・点検などを行う活動である。')}</li>
+     <li><span class="lab">エ</span>${R('バスタブ曲線において、偶発故障期は故障率が時間とともに急激に増加する期間である。')}</li>
+    </ol>
+    <details><summary>Lihat jawaban &amp; pembahasan</summary><div class="ans">
+     <div><span class="mark o">○</span>ア: pencegahan = cek &amp; ganti komponen <b>sebelum</b> rusak.</div>
+     <div><span class="mark o">○</span>イ: perbaikan <b>setelah</b> rusak.</div>
+     <div><span class="mark o">○</span>ウ: operator membersihkan &amp; mengecek sendiri setiap hari.</div>
+     <div><span class="mark x">×</span><b>エ = jawaban.</b> Istilah ditukar: di ${R('偶発故障期')} tingkat kerusakan kira-kira <b>tetap</b>. Yang naik tajam adalah ${R('摩耗故障期')} (masa aus).</div>
+    </div></details>
+   </div>
+   <div class="q">
+    <div class="note">Contoh latihan 2 · soal ○</div>
+    <div class="stem">${R('在庫管理に関する記述として、最も適切なものを選びなさい。')}</div>
+    <ol>
+     <li><span class="lab">ア</span>${R('定量発注方式は、発注時期が一定で、発注量が毎回変わる方式である。')}</li>
+     <li><span class="lab">イ</span>${R('安全在庫は、需要の変動や調達期間のばらつきに備えて持つ在庫である。')}</li>
+     <li><span class="lab">ウ</span>${R('ABC管理では、すべての品目を同じ方法で管理しなければならない。')}</li>
+     <li><span class="lab">エ</span>${R('在庫は多ければ多いほどよい。')}</li>
+    </ol>
+    <details><summary>Lihat jawaban &amp; pembahasan</summary><div class="ans">
+     <div><span class="mark x">×</span>ア: ini definisi ${R('定期発注方式')} yang ditukar (waktu tetap, jumlah berubah).</div>
+     <div><span class="mark o">○</span><b>イ = jawaban.</b> Stok cadangan untuk jaga-jaga permintaan/lead time berubah.</div>
+     <div><span class="mark x">×</span>ウ: kata mutlak すべて + しなければならない. ABC justru membedakan cara kelola per kelompok.</div>
+     <div><span class="mark x">×</span>エ: "makin banyak stok makin baik" → bertentangan dengan prinsip ムダ.</div>
+    </div></details>
+   </div>
+   <p class="note">Contoh soal di atas dibuat untuk latihan (bukan soal ujian asli). Latihan terbaik: di setiap 過去問, tulis ○/×/△ di SEMUA pilihan, dan untuk tiap × tulis kata mana yang dipelintir.</p>
+  </div>
+  <div class="card"><h3><span class="no">04</span>Manajemen waktu (perkiraan 40 soal · 110 menit)</h3>
+   <div class="tblwrap"><table><thead><tr><th>Menit</th><th>Yang dilakukan</th></tr></thead><tbody>
+    <tr><td class="t">0–60</td><td><b>Ronde 1:</b> jawab semua soal yang kamu yakin (±1,5 menit/soal). Soal panjang/ragu → beri tanda ▲ di kertas soal, lewati.</td></tr>
+    <tr><td class="t">60–95</td><td><b>Ronde 2:</b> kembali ke soal ▲. Pakai eliminasi; terjemahkan kata kunci saja.</td></tr>
+    <tr><td class="t">95–105</td><td><b>Ronde 3:</b> isi semua yang masih kosong (tebakan terbaik).</td></tr>
+    <tr><td class="t">105–110</td><td><b>Cek lembar jawaban:</b> nomor soal sejajar dengan kolom jawaban, tidak ada yang dobel.</td></tr>
+   </tbody></table></div>
+  </div>
+  <div class="card"><h3><span class="no">05</span>Rumus wajib hafal (soal hitungan)</h3>
+   <div class="frm">
+    ${F('稼働率','稼働時間 ÷ 総時間 × 100%','Persen waktu mesin/orang benar-benar bekerja.')}
+    ${F('設備総合効率','時間稼働率 × 性能稼働率 × 良品率','OEE. Tiga angka dikalikan, contoh 0,9 × 0,9 × 0,95 = 0,77 → 77%.')}
+    ${F('標準時間','正味時間 × (1 + 余裕率)','Cara 外掛け (余裕率 dihitung dari waktu normal). Cara 内掛け: 正味時間 ÷ (1 − 余裕率).')}
+    ${F('発注点','1日の平均使用量 × 調達期間 + 安全在庫','Saat stok turun sampai angka ini → pesan lagi.')}
+    ${F('製造原価','直接材料費 + 直接労務費 + 直接経費 + 製造間接費')}
+    ${F('総原価','製造原価 + 販売費 + 一般管理費')}
+    ${F('損益分岐点売上高','固定費 ÷ (1 − 変動費 ÷ 売上高)','(1 − 変動費 ÷ 売上高) disebut rasio margin kontribusi.')}
+    ${F('不良率','不良品数 ÷ 検査数 × 100%')}
+    ${F('歩留まり','良品 (産出量) ÷ 投入量 × 100%')}
+    ${F('度数率','労働災害による死傷者数 ÷ 延べ実労働時間数 × 1,000,000','Frekuensi: per SEJUTA jam kerja.')}
+    ${F('強度率','延べ労働損失日数 ÷ 延べ実労働時間数 × 1,000','Keparahan: per SERIBU jam kerja. Ingat: 強 (kuat) = angka kecil 1.000.')}
+   </div>
+   <p class="note">Rumus di atas adalah bentuk standar yang umum dipakai; cocokkan istilah persisnya dengan buku teksmu saat sampai di bab terkait.</p>
+  </div>
+  <div class="card hari"><h3><span class="no">06</span>Checklist menjelang ujian</h3>
+   ${HARI.map((x,i)=>`<label for="hari-${i}"><input type="checkbox" id="hari-${i}" data-hari="${i}" ${state.hari&&state.hari[i]?'checked':''}><span><span class="pill">${x[0]}</span> ${R(x[1])}</span></label>`).join('')}
+  </div>
+  <div class="card"><h3><span class="no">07</span>Kebiasaan yang membuat lulus</h3>
+   <ul>
+    <li><b>Sedikit tapi tiap hari</b> lebih kuat dari 5 jam di hari Minggu. Kalau capek setelah shift, cukup 15 menit kartu kanji — yang penting rantainya tidak putus.</li>
+    <li><b>Hubungkan dengan line-mu.</b> Saat melihat mesin berhenti, sebut dalam hati: ${R('段取り')}? ${R('故障')}? Itu ${R('稼働率')} turun. Otak lebih mudah ingat yang terlihat setiap hari.</li>
+    <li><b>Belajar di waktu tetap</b> (misalnya setelah mandi pulang kerja) supaya jadi kebiasaan otomatis.</li>
+    <li><b>Minggu terakhir jangan panik.</b> Materi baru di H-7 hampir tidak masuk; lebih baik mengulang yang sudah dipelajari dan tidur cukup.</li>
+   </ul>
+  </div>`;
+}
+function renderAll(){renderStats();renderRoadmap();renderMateri();renderVocab();renderLatihan();renderTips();renderCara()}
+
+// ---------- EVENTS ----------
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='vSel'){vFilter=t.value;lsPut(LS+'-vf',vFilter);vQueue=[];renderVocab();return}
+  if(t.id==='vOnly'){vOnly=t.checked;vQueue=[];renderVocab();return}
+  if(t.dataset&&t.dataset.hari!==undefined){state.hari=state.hari||{}; if(t.checked) state.hari[t.dataset.hari]=true; else delete state.hari[t.dataset.hari]; persist(); return}
+  const id=t.dataset&&t.dataset.id; if(!id) return;
+  if(t.checked) state.done[id]=true; else delete state.done[id];
+  t.closest('.item').classList.toggle('done',t.checked);
+  renderStats(); renderRoadmap();
+  const det=t.closest('details.ch'); if(det){const ids=ORDER.filter(i=>i.startsWith(det.dataset.ch+'-'));det.querySelector('.chmeta').innerHTML=cnt(ids)+'/'+ids.length+'<br>hlm '+CH[det.dataset.ch].p}
+  persist();
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='logForm') return; e.preventDefault();
+  const s=+$('#lgS').value, n=+$('#lgN').value; if(!(n>0)||s<0||s>n){note('Skor harus antara 0 dan jumlah soal.');return}
+  state.logs.push({id:Date.now().toString(36),d:$('#lgD').value,t:$('#lgT').value,s,n});
+  renderLatihan(); persist();
+});
+document.addEventListener('click',e=>{
+  const el=e.target.closest('button'); if(!el) return;
+  const d=el.dataset;
+  if(d.del){state.logs=state.logs.filter(l=>l.id!==d.del);renderLatihan();persist();return}
+  if(d.goto){const t=document.getElementById(d.goto); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); return}
+  if(d.tab){showTab(d.tab);return}
+  if(d.vocab){vFilter=d.vocab;lsPut(LS+'-vf',vFilter);vQueue=[];vMode='card';renderVocab();showTab('kosakata');window.scrollTo(0,0);return}
+  if(d.vmode){vMode=d.vmode;renderVocab();return}
+  if(d.vreveal){vReveal=true;renderVocab();return}
+  if(d.vans){const v=vQueue[vIdx]; if(v){state.vocab[v.key]=d.vans; persist();} vIdx++; vReveal=false; if(vIdx>=vQueue.length) vQueue=[]; renderStats(); renderVocab(); refreshCounts(); return}
+  if(d.vtoggle){const k=d.vtoggle, cur=state.vocab[k]; const nx=!cur?'ok':cur==='ok'?'again':null; if(nx) state.vocab[k]=nx; else delete state.vocab[k]; persist(); renderStats(); renderVocab(); refreshCounts(); return}
+});
+let rcTimer=null;
+function refreshCounts(){clearTimeout(rcTimer);rcTimer=setTimeout(()=>{renderRoadmap();renderMateri()},400)}
+document.addEventListener('keydown',e=>{
+  if($('#p-kosakata').hidden||vMode!=='card'||/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if(e.key===' '&&!vReveal){e.preventDefault();vReveal=true;renderVocab()}
+});
+function showTab(t){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+  TABS.forEach(p=>$('#p-'+p).hidden=p!==t);
+  lsPut(LS+'-tab',t);
+}
+function setFuri(on){document.body.classList.toggle('nofuri',!on);const b=$('#furiBtn');b.setAttribute('aria-pressed',on);b.textContent='Furigana: '+(on?'ON':'OFF');lsPut(LS+'-furi',on?'1':'0')}
+$('#furiBtn').addEventListener('click',()=>setFuri(document.body.classList.contains('nofuri')));
+
+// ---------- BOOT ----------
+renderAll();
+setFuri(lsGet(LS+'-furi')!=='0');
+let startTab=lsGet(LS+'-tab')||'roadmap';
+const hh=location.hash.slice(1); if(TABS.includes(hh)) startTab=hh;
+showTab(TABS.includes(startTab)?startTab:'roadmap');
+
+// ---------- BACKUP ----------
+function snapshot(){return JSON.stringify({app:'bc3-roadmap',v:1,saved:new Date().toISOString(),state})}
+function restore(txt){
+  let d; try{d=JSON.parse(txt)}catch(e){try{d=JSON.parse(decodeURIComponent(escape(atob(txt.trim()))))}catch(e2){d=null}}
+  const s=d&&(d.state||d);
+  if(!s||typeof s!=='object'||!('done' in s)){bkMsg('Kode/file tidak dikenali. Pastikan disalin lengkap.');return}
+  state={done:s.done||{},logs:s.logs||[],vocab:s.vocab||{},hari:s.hari||{},days:s.days||{}}; persist(); vQueue=[]; renderAll();
+  bkMsg('Progres berhasil dipulihkan ✓');
+}
+const bkMsg=t=>{$('#bkMsg').textContent=t};
+$('#bkDown').addEventListener('click',()=>{
+  const b=new Blob([snapshot()],{type:'application/json'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download='bc3-progres-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+  bkMsg('File backup diunduh.');
+});
+$('#bkFile').addEventListener('change',e=>{const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>restore(r.result); r.readAsText(f); e.target.value=''});
+$('#bkCopy').addEventListener('click',async()=>{
+  const code=btoa(unescape(encodeURIComponent(snapshot()))); const ta=$('#bkCode'); ta.value=code;
+  try{await navigator.clipboard.writeText(code); bkMsg('Kode disalin. Tempel di perangkat lain lalu tekan "Pulihkan dari kode".')}
+  catch(e){ta.select(); bkMsg('Kode sudah dibuat di kotak atas — salin manual.')}
+});
+$('#bkPaste').addEventListener('click',()=>{const v=$('#bkCode').value.trim(); if(!v){bkMsg('Tempel kode backup di kotak dulu.');return} restore(v)});
+let resetArm=false;
+$('#bkReset').addEventListener('click',e=>{
+  if(!resetArm){resetArm=true;e.target.textContent='Yakin? Tekan sekali lagi';setTimeout(()=>{resetArm=false;e.target.textContent='Hapus semua progres'},4000);return}
+  state={done:{},logs:[],vocab:{},hari:{},days:{}}; lsPut(LS,JSON.stringify(state)); vQueue=[]; renderAll(); resetArm=false; e.target.textContent='Hapus semua progres'; bkMsg('Semua progres dihapus.');
+});
+if('serviceWorker' in navigator && location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "Roadmap BC3 生産管理 · Joseph",
+  "short_name": "BC3 生産管理",
+  "description": "Roadmap, tracker, kosakata & kanji untuk ビジネス・キャリア検定 3級 生産管理オペレーション",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1114",
+  "theme_color": "#15181c",
+  "lang": "id",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
